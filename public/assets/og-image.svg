@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#0f172a" />
+      <stop offset="1" stop-color="#0f0f0f" />
+    </linearGradient>
+    <style>
+      .title { fill: #fff; font-family: Inter, system-ui, Arial; font-weight: 700; font-size: 48px }
+      .subtitle { fill: #9ca3af; font-family: Inter, system-ui, Arial; font-weight: 500; font-size: 24px }
+    </style>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)" />
+  <g transform="translate(60,120)">
+    <text class="title">Parallax Quote — Esfyq</text>
+    <text class="subtitle" y="60">Interactive portfolio — React · Three.js · Anime.js</text>
+  </g>
+</svg>

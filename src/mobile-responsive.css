@@ -1,0 +1,218 @@
+/* Mobile Responsive Enhancements */
+
+/* ============== GENERAL ============== */
+@media (max-width: 768px) {
+  /* Reduce motion for battery saving on mobile */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ============== HERO SECTION ============== */
+@media (max-width: 640px) {
+  #hero {
+    padding: 3rem 1.5rem !important;
+    min-height: 80vh !important;
+  }
+  
+  #hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem) !important;
+    margin-bottom: 2rem !important;
+  }
+  
+  #hero p {
+    font-size: clamp(0.875rem, 2vw, 1rem) !important;
+  }
+}
+
+/* ============== PROJECTS SECTION ============== */
+@media (max-width: 640px) {
+  #projects {
+    padding: 3rem 1.5rem !important;
+    min-height: auto !important;
+  }
+  
+  .projects-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+  
+  .glassy-card {
+    min-height: 280px !important;
+    padding: 1.5rem !important;
+  }
+  
+  .glassy-card h3 {
+    font-size: clamp(1.1rem, 3vw, 1.3rem) !important;
+  }
+  
+  .glassy-card p {
+    font-size: clamp(0.875rem, 2vw, 0.95rem) !important;
+    line-height: 1.6 !important;
+  }
+}
+
+/* ============== ABOUT SECTION ============== */
+@media (max-width: 640px) {
+  #about {
+    padding: 3rem 1.5rem !important;
+    min-height: auto !important;
+  }
+  
+  .about-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+  
+  .skills-container {
+    gap: 0.75rem !important;
+  }
+  
+  .skill-tag {
+    font-size: 0.75rem !important;
+    padding: 0.4rem 0.75rem !important;
+  }
+}
+
+/* ============== CONTACT SECTION ============== */
+@media (max-width: 640px) {
+  #contact {
+    padding: 3rem 1.5rem !important;
+    min-height: auto !important;
+  }
+  
+  .contact-form {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem !important;
+  }
+  
+  input,
+  textarea {
+    font-size: 16px !important; /* Prevents iOS zoom */
+    padding: 0.875rem !important;
+  }
+  
+  textarea {
+    min-height: 150px !important;
+    rows: 4 !important;
+  }
+  
+  .social-links {
+    flex-wrap: wrap !important;
+    gap: 1rem !important;
+  }
+  
+  .social-link {
+    font-size: 0.8rem !important;
+  }
+}
+
+/* ============== NAVIGATION ============== */
+@media (max-width: 768px) {
+  nav {
+    padding: 1rem 1.5rem !important;
+  }
+  
+  .nav-logo {
+    font-size: 1.25rem !important;
+  }
+  
+  .nav-links {
+    gap: 1rem !important;
+  }
+  
+  .nav-link {
+    font-size: 0.8rem !important;
+  }
+}
+
+/* ============== 3D BACKGROUND ============== */
+@media (max-width: 640px) {
+  /* Disable 3D background on very small devices to save performance */
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+/* ============== TOUCH INTERACTIONS ============== */
+@media (hover: none) and (pointer: coarse) {
+  /* Mobile devices - simplify animations on hover */
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .nav-link:active,
+  button:active {
+    opacity: 0.7;
+  }
+}
+
+/* ============== LANDSCAPE MODE ============== */
+@media (max-height: 500px) and (orientation: landscape) {
+  #hero,
+  #about,
+  #projects,
+  #contact {
+    min-height: auto !important;
+    padding: 2rem 1.5rem !important;
+  }
+  
+  h2 {
+    margin-bottom: 2rem !important;
+  }
+}
+
+/* ============== SAFE AREA INSETS (NOTCH DEVICES) ============== */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+  
+  nav {
+    padding-left: max(1rem, env(safe-area-inset-left)) !important;
+    padding-right: max(1rem, env(safe-area-inset-right)) !important;
+  }
+}
+
+/* ============== TEXT SCALING ============== */
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+  
+  h1 {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  
+  h2 {
+    font-size: clamp(1.25rem, 3.5vw, 2rem);
+  }
+  
+  h3 {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+  }
+}
+
+/* ============== SCROLLBAR VISIBILITY ============== */
+@media (max-width: 768px) {
+  /* Hide scrollbar on mobile but keep scrolling */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
