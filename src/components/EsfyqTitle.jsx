@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
 import { gsap } from 'gsap'
 
 export default function EsfyqTitle() {
@@ -16,7 +15,7 @@ export default function EsfyqTitle() {
       const chars = text.split('')
       titleRef.current.innerHTML = ''
       
-      chars.forEach((char, i) => {
+      chars.forEach((char) => {
         const span = document.createElement('span')
         span.textContent = char === ' ' ? '\u00A0' : char
         span.style.display = 'inline-block'

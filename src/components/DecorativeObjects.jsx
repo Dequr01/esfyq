@@ -10,10 +10,7 @@ import * as THREE from 'three'
  * - Red angular object (behind Pokédex)
  */
 export default function DecorativeObjects() {
-  const flowerRef = useRef(null)
   const dodecahedronRef = useRef(null)
-  const heartRef = useRef(null)
-  const angularRef = useRef(null)
 
   // Create 3D objects using Three.js for some elements
   useEffect(() => {
@@ -159,4 +156,3 @@ export default function DecorativeObjects() {
     </div>
   )
 }
-

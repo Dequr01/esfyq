@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const techIcons = [
   { src: '/assets/react-icon.svg', alt: 'React', name: 'React' },
@@ -114,4 +114,3 @@ export default function AnimatedTechStack() {
     </motion.div>
   )
 }
-
