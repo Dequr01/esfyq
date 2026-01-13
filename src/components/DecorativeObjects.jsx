@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion'
 import { useEffect, useRef } from 'react'
+import anime from 'animejs'
 import * as THREE from 'three'
 
 /**
@@ -10,11 +10,51 @@ import * as THREE from 'three'
  * - Red angular object (behind Pokédex)
  */
 export default function DecorativeObjects() {
+  const flowerRef = useRef(null)
   const dodecahedronRef = useRef(null)
+  const heartRef = useRef(null)
+  const angularRef = useRef(null)
 
-  // Create 3D objects using Three.js for some elements
+  // Animations and 3D objects
   useEffect(() => {
-    // Dodecahedron
+    // Anime animations for decorative elements
+    anime({
+      targets: flowerRef.current,
+      opacity: [0, 1],
+      scale: [0, 1],
+      duration: 800,
+      delay: 1200,
+      easing: 'easeOutExpo',
+    })
+
+    anime({
+      targets: dodecahedronRef.current,
+      opacity: [0, 1],
+      rotateY: [-90, 0],
+      duration: 1000,
+      delay: 1400,
+      easing: 'easeOutExpo',
+    })
+
+    anime({
+      targets: heartRef.current,
+      opacity: [0, 1],
+      scale: [0, 1],
+      duration: 600,
+      delay: 1300,
+      easing: 'easeOutExpo',
+    })
+
+    anime({
+      targets: angularRef.current,
+      opacity: [0, 1],
+      rotate: [-45, -45],
+      duration: 800,
+      delay: 1500,
+      easing: 'easeOutExpo',
+    })
+
+    // Dodecahedron 3D
     if (dodecahedronRef.current) {
       const scene = new THREE.Scene()
       const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000)
@@ -56,16 +96,16 @@ export default function DecorativeObjects() {
   return (
     <div className="absolute inset-0 pointer-events-none z-13">
       {/* Flower-shaped object (bottom-left) */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 1.2, duration: 0.8 }}
+      <div
+        ref={flowerRef}
         className="absolute"
         style={{
           bottom: '10%',
           left: '5%',
           width: '60px',
           height: '60px',
+          opacity: 0,
+          transform: 'scale(0)',
         }}
       >
         <svg viewBox="0 0 100 100" className="w-full h-full">
@@ -86,34 +126,33 @@ export default function DecorativeObjects() {
             <circle cx="0" cy="0" r="15" fill="#FFD700" />
           </g>
         </svg>
-      </motion.div>
+      </div>
 
       {/* White Dodecahedron (near professional title) */}
-      <motion.div
-        initial={{ opacity: 0, rotateY: -90 }}
-        animate={{ opacity: 1, rotateY: 0 }}
-        transition={{ delay: 1.4, duration: 1 }}
+      <div
         className="absolute"
         style={{
           top: '45%',
           left: '25%',
           width: '80px',
           height: '80px',
+          opacity: 0,
+          transform: 'rotateY(-90deg)',
         }}
         ref={dodecahedronRef}
       />
 
       {/* Red Heart (near tech stack) */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 1.3, duration: 0.6, type: 'spring' }}
+      <div
+        ref={heartRef}
         className="absolute"
         style={{
           bottom: '25%',
           right: '15%',
           width: '30px',
           height: '30px',
+          opacity: 0,
+          transform: 'scale(0)',
         }}
       >
         <svg viewBox="0 0 100 100" className="w-full h-full">
@@ -124,13 +163,11 @@ export default function DecorativeObjects() {
             strokeWidth="2"
           />
         </svg>
-      </motion.div>
+      </div>
 
       {/* Red Angular Object (behind Pokédex, top-right) */}
-      <motion.div
-        initial={{ opacity: 0, rotate: -45 }}
-        animate={{ opacity: 1, rotate: -45 }}
-        transition={{ delay: 1.5, duration: 0.8 }}
+      <div
+        ref={angularRef}
         className="absolute"
         style={{
           top: '20%',
@@ -138,6 +175,7 @@ export default function DecorativeObjects() {
           width: '40px',
           height: '60px',
           transform: 'rotate(-45deg)',
+          opacity: 0,
         }}
       >
         <svg viewBox="0 0 100 150" className="w-full h-full">
@@ -152,7 +190,7 @@ export default function DecorativeObjects() {
             fill="#cc0000"
           />
         </svg>
-      </motion.div>
+      </div>
     </div>
   )
 }

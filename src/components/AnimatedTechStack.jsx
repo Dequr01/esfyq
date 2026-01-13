@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import anime from 'animejs'
 
 const techIcons = [
   { src: '/assets/react-icon.svg', alt: 'React', name: 'React' },
@@ -9,108 +9,114 @@ const techIcons = [
   { src: '/assets/css-icon.svg', alt: 'CSS', name: 'CSS' },
 ]
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.3,
-    },
-  },
-}
-
-const iconVariants = {
-  hidden: { 
-    opacity: 0, 
-    scale: 0,
-    rotate: -180,
-  },
-  visible: { 
-    opacity: 1, 
-    scale: 1,
-    rotate: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 200,
-      damping: 15,
-    },
-  },
-  hover: {
-    scale: 1.3,
-    rotate: 360,
-    y: -10,
-    transition: {
-      type: 'spring',
-      stiffness: 400,
-      damping: 10,
-    },
-  },
-}
-
 export default function AnimatedTechStack() {
   const [hoveredIndex, setHoveredIndex] = useState(null)
+  const containerRef = useRef(null)
+  const titleRef = useRef(null)
+  const iconsRef = useRef(null)
+  const iconRefs = useRef([])
+
+  useEffect(() => {
+    // Initial animation
+    const timeline = anime.timeline({
+      easing: 'easeOutExpo',
+    })
+
+    timeline
+      .add({
+        targets: titleRef.current,
+        opacity: [0, 1],
+        translateY: [-20, 0],
+        duration: 600,
+        delay: 500,
+      })
+      .add({
+        targets: iconRefs.current,
+        opacity: [0, 1],
+        scale: [0, 1],
+        rotate: [-180, 0],
+        duration: 800,
+        delay: anime.stagger(100, { start: 300 }),
+      })
+  }, [])
+
+  const handleMouseEnter = (index, element) => {
+    setHoveredIndex(index)
+    anime({
+      targets: element,
+      scale: 1.3,
+      rotate: 360,
+      translateY: -10,
+      duration: 400,
+      easing: 'easeOutQuad',
+    })
+  }
+
+  const handleMouseLeave = (element) => {
+    setHoveredIndex(null)
+    anime({
+      targets: element,
+      scale: 1,
+      rotate: 0,
+      translateY: 0,
+      duration: 400,
+      easing: 'easeOutQuad',
+    })
+  }
 
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
+    <div
+      ref={containerRef}
       className="bg-white/95 rounded-2xl shadow-xl px-6 py-4 flex flex-col items-center backdrop-blur-sm"
-      style={{ minWidth: '200px' }}
+      style={{ minWidth: '200px', opacity: 0 }}
     >
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 0.6 }}
+      <div
+        ref={titleRef}
         className="uppercase font-bold text-gray-800 mb-2 text-right w-full"
+        style={{ opacity: 0, transform: 'translateY(-20px)' }}
       >
         TECHNOLOGY STACK
-      </motion.div>
-      <motion.div
-        variants={containerVariants}
+      </div>
+      <div
+        ref={iconsRef}
         className="flex gap-4 flex-wrap items-center justify-center"
       >
         {techIcons.map((icon, index) => (
-          <motion.div
+          <div
             key={icon.alt}
-            variants={iconVariants}
-            whileHover="hover"
-            onHoverStart={() => setHoveredIndex(index)}
-            onHoverEnd={() => setHoveredIndex(null)}
+            ref={(el) => (iconRefs.current[index] = el)}
+            onMouseEnter={(e) => handleMouseEnter(index, e.currentTarget)}
+            onMouseLeave={(e) => handleMouseLeave(e.currentTarget)}
             className="relative group"
+            style={{ opacity: 0, transform: 'scale(0) rotate(-180deg)' }}
           >
-            <motion.img
+            <img
               src={icon.src}
               alt={icon.alt}
               className="h-8 w-8 transition-all duration-300"
               style={{
-                filter: hoveredIndex === index 
-                  ? 'drop-shadow(0 0 15px rgba(255,0,0,0.6)) brightness(1.2)' 
+                filter: hoveredIndex === index
+                  ? 'drop-shadow(0 0 15px rgba(255,0,0,0.6)) brightness(1.2)'
                   : 'none',
               }}
             />
             {hoveredIndex === index && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
+              <div
                 className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none"
+                style={{ opacity: 0 }}
               >
                 {icon.name}
-              </motion.div>
+              </div>
             )}
             {hoveredIndex === index && (
-              <motion.div
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1.5, opacity: [0, 0.5, 0] }}
-                transition={{ duration: 0.6, repeat: Infinity }}
+              <div
                 className="absolute inset-0 rounded-full border-2 border-red-500 pointer-events-none"
+                style={{ opacity: 0, transform: 'scale(0)' }}
               />
             )}
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   )
 }

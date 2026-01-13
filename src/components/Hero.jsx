@@ -175,7 +175,7 @@ export default function Hero() {
             maxWidth: '100%',
           }}
         >
-          Senior Software Engineer
+          Front End Software Engineer
         </h1>
         {/* ===== SUBTITLE: "Building digital experiences with code" ===== */}
         {/* Removed MarqueeText wrapper - now displays as normal text with word wrapping on mobile */}

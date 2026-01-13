@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
+import anime from 'animejs'
 
 export default function EsfyqTitle() {
   const ref = useRef(null)
@@ -32,24 +32,25 @@ export default function EsfyqTitle() {
       titleRef.current?.appendChild(cursorSpan)
 
       const charSpans = titleRef.current.querySelectorAll('span:not(.cursor)')
-      gsap.to(charSpans, {
-        opacity: 1,
-        y: 0,
-        rotationX: 0,
-        duration: 0.6,
-        stagger: 0.03,
-        ease: 'back.out(1.7)',
-        delay: 0.5,
+      anime({
+        targets: charSpans,
+        opacity: [0, 1],
+        translateY: [50, 0],
+        rotateX: [90, 0],
+        duration: 600,
+        delay: anime.stagger(30, { start: 500 }),
+        easing: 'easeOutBack',
       })
 
       // Continuous cursor blink
-      gsap.to(cursorSpan, {
-        opacity: 0,
-        duration: 0.8,
-        repeat: -1,
-        yoyo: true,
-        ease: 'power2.inOut',
-        delay: 1.5,
+      anime({
+        targets: cursorSpan,
+        opacity: [1, 0],
+        duration: 800,
+        loop: true,
+        direction: 'alternate',
+        easing: 'easeInOutQuad',
+        delay: 1500,
       })
     }
   }, [])

@@ -8,7 +8,6 @@ import ModelBackground from './components/ModelBackground'
 import LoadingScreen from './components/LoadingScreen'
 import { useMagneticScroll } from './hooks/useMagneticScroll'
 import { ThemeProvider } from './context/ThemeContext'
-import './App.css'
 
 function App() {
   const [modelLoaded, setModelLoaded] = useState(false)
