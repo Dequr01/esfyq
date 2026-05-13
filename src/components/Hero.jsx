@@ -1,124 +1,49 @@
-import { useEffect, useRef } from 'react'
-import anime from 'animejs'
-import MarqueeText from './MarqueeText'
-import GlassyCard from './GlassyCard'
+import { useEffect, useRef, useState } from 'react'
 
 export default function Hero() {
+  const [hasAnimated, setHasAnimated] = useState(false)
   const heroRef = useRef(null)
-  const titleRef = useRef(null)
-  const subtitleRef = useRef(null)
-  const descriptionRef = useRef(null)
-  const buttonRef = useRef(null)
 
   useEffect(() => {
-    if (typeof anime === 'undefined') {
-      if (titleRef.current) titleRef.current.style.opacity = '1'
-      if (subtitleRef.current) subtitleRef.current.style.opacity = '1'
-      if (descriptionRef.current) descriptionRef.current.style.opacity = '1'
-      if (buttonRef.current) buttonRef.current.style.opacity = '1'
-      return
-    }
-
-    // Set initial state for subtitle to be more hidden before animation
-    if (subtitleRef.current) {
-      subtitleRef.current.style.opacity = '0'
-      subtitleRef.current.style.transform = 'translateY(40px)'
-    }
-    // Animate subtitle independently with precision and delay
-    const subtitleAnim = () => {
-      if (!subtitleRef.current) return
-      anime({
-        targets: subtitleRef.current,
-        opacity: [0, 1],
-        translateY: [40, 0],
-        duration: 1200,
-        easing: 'easeOutExpo',
-        delay: 500
-      })
-    }
-
-    // Use IntersectionObserver to trigger animation only once when in view
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            try {
-              const timeline = anime.timeline({
-                easing: 'easeOutExpo',
-                duration: 1000,
-              })
-
-              timeline
-                .add({
-                  targets: titleRef.current,
-                  opacity: [0, 1],
-                  translateY: [50, 0],
-                  duration: 1200,
-                }, '-=800')
-                // Replace subtitle animation in timeline with separate controlled anim
-                // .add({
-                //   targets: subtitleRef.current,
-                //   opacity: [0, 1],
-                //   translateY: [30, 0],
-                //   duration: 1000,
-                // }, '-=800')
-                .add({
-                  targets: descriptionRef.current,
-                  opacity: [0, 1],
-                  translateY: [30, 0],
-                  duration: 1000,
-                }, '-=700')
-                .add({
-                  targets: buttonRef.current,
-                  opacity: [0, 1],
-                  scale: [0.8, 1],
-                  duration: 800,
-                }, '-=600')
-
-              subtitleAnim()
-
-              // Continuous background animation
-              if (heroRef.current) {
-                anime({
-                  targets: heroRef.current,
-                  backgroundPosition: ['0% 0%', '100% 100%'],
-                  duration: 15000,
-                  easing: 'linear',
-                  loop: true,
-                  direction: 'alternate',
-                })
-              }
-            } catch (error) {
-              if (titleRef.current) titleRef.current.style.opacity = '1'
-              if (subtitleRef.current) subtitleRef.current.style.opacity = '1'
-              if (descriptionRef.current) descriptionRef.current.style.opacity = '1'
-              if (buttonRef.current) buttonRef.current.style.opacity = '1'
-            }
-            
-            // Unobserve after animation triggers once
+          if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true)
             observer.unobserve(entry.target)
           }
         })
       },
-      { threshold: 0.1 }
+      { threshold: 0.3 }
     )
+    if (heroRef.current) observer.observe(heroRef.current)
+    return () => { if (heroRef.current) observer.unobserve(heroRef.current) }
+  }, [hasAnimated])
 
-    if (heroRef.current) {
-      observer.observe(heroRef.current)
-    }
+  const scrollToProjects = () => {
+    const container = document.querySelector('.scroll-container')
+    if (container) container.scrollTo({ top: window.innerHeight * 2, behavior: 'smooth' })
+  }
 
-    return () => {
-      if (heroRef.current) {
-        observer.unobserve(heroRef.current)
-      }
-    }
-  }, [])
+  const fadeUp = (delay) => ({
+    opacity: hasAnimated ? 1 : 0,
+    transform: hasAnimated ? 'translateY(0px)' : 'translateY(40px)',
+    transition: `opacity 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
+  })
 
-  const scrollToId = (id) => {
-    const element = document.getElementById(id)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-    }
+  /*
+    mix-blend-mode: difference rules:
+    - text color must be pure #ffffff
+    - NO overflow:hidden on any ancestor (creates stacking context, breaks blend)
+    - NO numeric z-index on any ancestor (same problem)
+    - NO background on any ancestor between text and canvas
+    The section and wrapper both use overflow:visible and zIndex:auto intentionally.
+  */
+  const blend = {
+    color: '#ffffff',
+    mixBlendMode: 'difference',
+    background: 'transparent',
+    display: 'block',
   }
 
   return (
@@ -126,155 +51,123 @@ export default function Hero() {
       id="hero"
       ref={heroRef}
       style={{
-        height: '100vh',
-        minHeight: '100vh',
+        width: '100%',
+        height: '100%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 'clamp(1rem, 4vw, 4rem)',
+        padding: '2rem',
         background: 'transparent',
-        backgroundSize: '200% 200%',
         position: 'relative',
-        overflow: 'hidden',
-        zIndex: 1,
-        boxSizing: 'border-box',
-        // ADJUST THIS: Initial opacity (will be controlled by scroll hook)
-        opacity: 1,
-        transition: 'opacity 0.5s ease, transform 0.5s ease',
+        overflow: 'visible',  /* MUST be visible — hidden kills blend mode */
+        zIndex: 'auto',     /* MUST be auto — any number creates stacking context */
       }}
     >
-      {/* Glass morphism card - true glass effect with light refraction */}
-      {/* ADJUST THIS FROM HERE: Card transparency and refraction effects */}
-      <GlassyCard
-        style={{
-          maxWidth: '1200px',
-          width: '100%',
-          textAlign: 'center',
-          borderRadius: '24px',
-          padding: 'clamp(2rem, 5vw, 4rem)',
-        }}
-      >
-        {/* ===== DESKTOP TITLE: "Senior Software Engineer" ===== */}
-        {/* Mobile version uses word-wrapping, desktop stays single line */}
-        <h1
-          ref={titleRef}
-          style={{
-            fontSize: 'clamp(2rem, 8vw, 6rem)',
-            fontWeight: 800,
-            lineHeight: 1.2,
-            marginBottom: '1.5rem',
-            letterSpacing: '-0.04em',
-            background: 'linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            wordWrap: 'break-word',
-            overflowWrap: 'break-word',
-            whiteSpace: 'normal',
-            maxWidth: '100%',
-          }}
-        >
-          Front End Software Engineer
+      <div style={{
+        maxWidth: '1200px',
+        width: '100%',
+        textAlign: 'center',
+        padding: '0 1rem',
+        background: 'transparent',
+        overflow: 'visible',      /* MUST be visible */
+        zIndex: 'auto',         /* MUST be auto */
+      }}>
+
+        <h1 style={{
+          ...fadeUp(0),
+          ...blend,
+          fontSize: 'clamp(2.5rem, 8vw, 6.5rem)',
+          fontWeight: 800,
+          lineHeight: 1.1,
+          marginBottom: '1.5rem',
+          letterSpacing: '-0.04em',
+        }}>
+          Bringing ideas to life
         </h1>
-        {/* ===== SUBTITLE: "Building digital experiences with code" ===== */}
-        {/* Removed MarqueeText wrapper - now displays as normal text with word wrapping on mobile */}
-        <h2
-          ref={subtitleRef}
-          style={{
-            fontSize: 'clamp(1.25rem, 4vw, 2.5rem)',
-            fontWeight: 400,
-            marginBottom: '2rem',
-            color: '#cccccc',
-            letterSpacing: '-0.02em',
-            wordWrap: 'break-word',
-            overflowWrap: 'break-word',
-            whiteSpace: 'normal',
-            maxWidth: '100%',
-          }}
-        >
-          Building digital experiences with code
+
+        <h2 style={{
+          ...fadeUp(150),
+          ...blend,
+          fontSize: 'clamp(0.9rem, 2.5vw, 1.5rem)',
+          fontWeight: 300,
+          marginBottom: '2rem',
+          letterSpacing: '0.12em',
+          textTransform: 'uppercase',
+        }}>
+          Good code is like poetry...
         </h2>
-        <p
-          ref={descriptionRef}
-          style={{
-            fontSize: 'clamp(1rem, 2vw, 1.1rem)',
-            lineHeight: 1.6,
-            maxWidth: '600px',
-            margin: '0 auto 3rem',
-            color: '#aaaaaa',
-          }}
-        >
-          AI & Python Developer | Building intelligent solutions with ML, OSINT tools, and automation
+
+        <p style={{
+          ...fadeUp(250),
+          ...blend,
+          fontSize: 'clamp(0.95rem, 1.8vw, 1.1rem)',
+          lineHeight: 1.6,
+          maxWidth: '560px',
+          margin: '0 auto 3rem',
+        }}>
+          Architecting high-performance digital experiences with precision and passion.
         </p>
-        <button
-          ref={buttonRef}
-          onClick={() => scrollToId('projects')}
-          style={{
-            padding: 'clamp(0.875rem, 2vw, 1rem) clamp(2rem, 4vw, 2.5rem)',
-            fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-            fontWeight: 500,
-            background: 'rgba(255, 255, 255, 0.1)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255,255,255,0.3)',
-            color: '#ffffff',
-            borderRadius: '50px',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            letterSpacing: '0.02em',
-          }}
-          onMouseEnter={(e) => {
-            if (typeof anime !== 'undefined') {
-              anime({
-                targets: e.target,
-                scale: 1.05,
-                background: 'rgba(255, 255, 255, 0.15)',
-                borderColor: 'rgba(255,255,255,0.5)',
-                duration: 300,
-                easing: 'easeOutQuad',
-              })
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (typeof anime !== 'undefined') {
-              anime({
-                targets: e.target,
-                scale: 1,
-                background: 'rgba(255, 255, 255, 0.1)',
-                borderColor: 'rgba(255,255,255,0.3)',
-                duration: 300,
-                easing: 'easeOutQuad',
-              })
-            }
-          }}
-        >
-          View My Work
-        </button>
-      </GlassyCard>
+
+        {/* CTA button — intentionally NO blend mode */}
+        <div style={{ ...fadeUp(350), display: 'inline-block' }}>
+          <button
+            onClick={scrollToProjects}
+            style={{
+              padding: '1rem 2.5rem',
+              fontSize: '0.85rem',
+              fontWeight: 500,
+              color: 'var(--text)',
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderRadius: '999px',
+              backdropFilter: 'blur(10px)',
+              cursor: 'pointer',
+              transition: 'background 0.4s ease, color 0.4s ease',
+              letterSpacing: '0.05em',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'var(--text)'
+              e.currentTarget.style.color = 'var(--bg)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'var(--surface)'
+              e.currentTarget.style.color = 'var(--text)'
+            }}
+          >
+            View My Work
+          </button>
+        </div>
+      </div>
 
       {/* Scroll indicator */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '2rem',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '0.5rem',
-          opacity: 0.5,
-          zIndex: 2,
-        }}
-      >
-        <span style={{ fontSize: '0.8rem', letterSpacing: '0.1em' }}>SCROLL</span>
-        <div
-          style={{
-            width: '1px',
-            height: '30px',
-            background: 'linear-gradient(to bottom, rgba(255,255,255,0.5), transparent)',
-          }}
-        />
+      <div style={{
+        position: 'absolute',
+        bottom: '1.5rem',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '0.5rem',
+        opacity: hasAnimated ? 0.4 : 0,
+        transition: 'opacity 1s ease 1.2s',
+        pointerEvents: 'none',
+        zIndex: 5,
+      }}>
+        <span style={{
+          fontSize: '0.6rem',
+          letterSpacing: '0.3em',
+          color: 'var(--text-muted)',
+          fontFamily: 'monospace',
+        }}>
+          SCROLL
+        </span>
+        <div style={{
+          width: '1px',
+          height: '3rem',
+          background: 'linear-gradient(to bottom, var(--text), transparent)',
+        }} />
       </div>
     </section>
   )

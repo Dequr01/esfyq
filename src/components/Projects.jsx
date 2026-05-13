@@ -1,47 +1,26 @@
-import { useEffect, useRef } from 'react'
-import anime from 'animejs'
-import { useTheme } from '../context/ThemeContext'
-import GlassyCard from './GlassyCard'
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { projects } from '../data/projects'
 
 export default function Projects() {
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [direction, setDirection] = useState(0)
+  const [hasAnimated, setHasAnimated] = useState(false)
   const sectionRef = useRef(null)
-  const titleRef = useRef(null)
-  const projectsRef = useRef(null)
-  const { isDark } = useTheme()
+
+  const activeProject = projects[activeIndex]
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const timeline = anime.timeline({
-              easing: 'easeOutExpo',
-            })
-
-            timeline
-              .add({
-                targets: titleRef.current,
-                opacity: [0, 1],
-                translateY: [50, 0],
-                duration: 1000,
-              })
-              .add(
-                {
-                  targets: projectsRef.current?.children,
-                  opacity: [0, 1],
-                  translateY: [40, 0],
-                  scale: [0.8, 1],
-                  delay: anime.stagger(100),
-                  duration: 700,
-                },
-                '-=600'
-              )
-            
+          if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true)
             observer.unobserve(entry.target)
           }
         })
       },
-      { threshold: 0.1 }
+      { threshold: 0.3 }
     )
 
     if (sectionRef.current) {
@@ -53,294 +32,193 @@ export default function Projects() {
         observer.unobserve(sectionRef.current)
       }
     }
-  }, [])
+  }, [hasAnimated])
 
-  // Skills grouped by category with SVG icons - Apple-like glassmorphic design
-  const skills = [
-    {
-      name: 'Python',
-      category: 'Language',
-      icon: (
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="20" cy="20" r="18" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="2"/>
-          <path d="M20 12C16.7 12 14 13.8 14 16V24C14 26.2 16.7 28 20 28C23.3 28 26 26.2 26 24V16C26 13.8 23.3 12 20 12Z" fill="rgba(255, 255, 255, 0.2)"/>
-          <path d="M16 15H24" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="1.5" strokeLinecap="round"/>
-        </svg>
-      ),
-    },
-    {
-      name: 'JavaScript',
-      category: 'Language',
-      icon: (
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="10" y="10" width="20" height="20" rx="2" fill="rgba(255, 255, 255, 0.1)" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="2"/>
-          <text x="20" y="27" textAnchor="middle" fill="rgba(255, 255, 255, 0.6)" fontSize="14" fontWeight="bold">JS</text>
-        </svg>
-      ),
-    },
-    {
-      name: 'React',
-      category: 'Framework',
-      icon: (
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="20" cy="20" r="5" fill="rgba(255, 255, 255, 0.4)"/>
-          <circle cx="20" cy="20" r="18" fill="none" stroke="rgba(255, 255, 255, 0.2)" strokeWidth="1.5" strokeDasharray="1 3"/>
-          <circle cx="20" cy="20" r="10" fill="none" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1.5" transform="rotate(0 20 20)"/>
-          <circle cx="20" cy="20" r="10" fill="none" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1.5" transform="rotate(60 20 20)"/>
-          <circle cx="20" cy="20" r="10" fill="none" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1.5" transform="rotate(120 20 20)"/>
-        </svg>
-      ),
-    },
-    {
-      name: 'TensorFlow Lite',
-      category: 'AI/ML',
-      icon: (
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 18L20 10L28 18M20 10V28M12 28H28" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-          <circle cx="20" cy="20" r="18" fill="none" stroke="rgba(255, 255, 255, 0.1)" strokeWidth="2"/>
-        </svg>
-      ),
-    },
-    {
-      name: 'OpenCV',
-      category: 'AI/ML',
-      icon: (
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="20" cy="20" r="10" fill="none" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="2"/>
-          <circle cx="20" cy="20" r="5" fill="rgba(255, 255, 255, 0.3)"/>
-          <circle cx="20" cy="20" r="18" fill="none" stroke="rgba(255, 255, 255, 0.1)" strokeWidth="1.5"/>
-          <path d="M15 20H25M20 15V25" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1"/>
-        </svg>
-      ),
-    },
-    {
-      name: 'Hugging Face',
-      category: 'AI/ML',
-      icon: (
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M13 16C11 16 10 18 10 20C10 22 11 24 13 24M27 16C29 16 30 18 30 20C30 22 29 24 27 24" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="2" strokeLinecap="round"/>
-          <path d="M15 18H25M15 22H25" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1.5" strokeLinecap="round"/>
-          <circle cx="20" cy="20" r="18" fill="none" stroke="rgba(255, 255, 255, 0.1)" strokeWidth="2"/>
-        </svg>
-      ),
-    },
-    {
-      name: 'PostgreSQL',
-      category: 'Database',
-      icon: (
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20 12C16 12 13 14 13 17V27C13 29 16 31 20 31C24 31 27 29 27 27V17C27 14 24 12 20 12Z" fill="rgba(255, 255, 255, 0.1)" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2"/>
-          <path d="M13 17C13 19 16 21 20 21C24 21 27 19 27 17" fill="none" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1.5"/>
-          <path d="M15 22L15 26M20 22V26M25 22V26" stroke="rgba(255, 255, 255, 0.25)" strokeWidth="1" strokeLinecap="round"/>
-        </svg>
-      ),
-    },
-    {
-      name: 'TailwindCSS',
-      category: 'Styling',
-      icon: (
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="20" cy="20" r="18" fill="none" stroke="rgba(255, 255, 255, 0.2)" strokeWidth="2"/>
-          <path d="M12 24C12 22 14 20 16 20C18 20 19 22 20 24C21 22 22 20 24 20C26 20 28 22 28 24" fill="none" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M16 16L24 16" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1.5" strokeLinecap="round"/>
-        </svg>
-      ),
-    },
-    {
-      name: 'Vite',
-      category: 'Build Tool',
-      icon: (
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="20,12 28,28 12,28" fill="rgba(255, 255, 255, 0.1)" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2"/>
-          <path d="M18 20L22 20M20 18V22" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="1.5" strokeLinecap="round"/>
-          <circle cx="20" cy="20" r="18" fill="none" stroke="rgba(255, 255, 255, 0.1)" strokeWidth="1.5"/>
-        </svg>
-      ),
-    },
-    {
-      name: 'Git',
-      category: 'Version Control',
-      icon: (
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="20" cy="20" r="18" fill="none" stroke="rgba(255, 255, 255, 0.2)" strokeWidth="2"/>
-          <circle cx="14" cy="13" r="2.5" fill="rgba(255, 255, 255, 0.5)"/>
-          <circle cx="28" cy="20" r="2.5" fill="rgba(255, 255, 255, 0.5)"/>
-          <circle cx="14" cy="27" r="2.5" fill="rgba(255, 255, 255, 0.5)"/>
-          <path d="M16 13L26 20M16 13L26 27" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1.5"/>
-        </svg>
-      ),
-    },
-    {
-      name: 'OSINT',
-      category: 'Specialization',
-      icon: (
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="20" cy="20" r="8" fill="none" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="2"/>
-          <path d="M20 14V12M20 28V26M14 20H12M28 20H26M15 15L13.5 13.5M26 26L24.5 24.5M25 15L26.5 13.5M14 26L12.5 24.5" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1.5" strokeLinecap="round"/>
-          <circle cx="20" cy="20" r="18" fill="none" stroke="rgba(255, 255, 255, 0.1)" strokeWidth="1.5"/>
-        </svg>
-      ),
-    },
-    {
-      name: 'AI Prompt Engineering',
-      category: 'Specialization',
-      icon: (
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 20C12 15.6 15.6 12 20 12C24.4 12 28 15.6 28 20C28 22.2 27 24.2 25.5 25.5L26 28L22 26C21.3 26.1 20.7 26.1 20 26.1C15.6 26.1 12 22.4 12 20Z" fill="rgba(255, 255, 255, 0.1)" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="1.5"/>
-          <path d="M16 20H24" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="1.5" strokeLinecap="round"/>
-        </svg>
-      ),
-    },
-  ]
+  const handleNext = () => {
+    setDirection(1)
+    setActiveIndex((prev) => (prev + 1) % projects.length)
+  }
+
+  const handlePrev = () => {
+    setDirection(-1)
+    setActiveIndex((prev) => (prev - 1 + projects.length) % projects.length)
+  }
+
+  const entranceStyle = (delay, x = 0) => ({
+    opacity: hasAnimated ? 1 : 0,
+    transform: hasAnimated ? 'translate(0, 0)' : `translate(${x}px, 20px)`,
+    transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`
+  })
 
   return (
     <section
       id="projects"
       ref={sectionRef}
-      style={{
-        minHeight: 'auto',
-        padding: 'clamp(2rem, 6vw, 4rem) clamp(1.5rem, 4vw, 4rem)',
-        maxWidth: '1400px',
-        margin: '0 auto',
-        background: 'transparent',
-        position: 'relative',
-        zIndex: 1,
-        boxSizing: 'border-box',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        opacity: 1,
-        transition: 'opacity 0.5s ease, transform 0.5s ease',
-      }}
+      className="w-screen h-screen relative flex flex-col md:flex-row overflow-hidden bg-transparent"
     >
-      <h2
-        ref={titleRef}
+      {/* Left Column: Project Info (40%) */}
+      <div 
         style={{
-          fontSize: 'clamp(2.5rem, 6vw, 4rem)',
-          fontWeight: 700,
-          marginBottom: 'clamp(2rem, 4vw, 3rem)',
-          letterSpacing: '-0.03em',
-          color: '#ffffff',
-          opacity: 0,
+          transform: hasAnimated ? 'translateX(0)' : 'translateX(-40px)',
+          opacity: hasAnimated ? 1 : 0,
+          transition: 'all 1s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
+        className="w-full md:w-[40%] h-full flex flex-col justify-center p-8 md:p-16 z-10 relative bg-black/60 backdrop-blur-3xl border-r border-white/10"
       >
-        Languages & Technologies
-      </h2>
+        <div className="flex flex-col gap-8">
+          {/* Section Header */}
+          <div className="space-y-2">
+            <span className="text-white/40 font-mono text-sm tracking-widest uppercase">
+              III — THE ARTIFACTS
+            </span>
+            <h2 className="text-white text-5xl md:text-6xl font-bold tracking-tight">
+              Selected Work.
+            </h2>
+          </div>
 
-      <div
-        ref={projectsRef}
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
-          gap: 'clamp(1rem, 2vw, 1.5rem)',
-        }}
-      >
-        {/* Skills grid with entry animation */}
-        {skills.map((skill, index) => (
-          <div
-            key={index}
-            style={{
-              opacity: 0,
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-            }}
-            onMouseEnter={(e) => {
-              if (typeof anime !== 'undefined') {
-                anime({
-                  targets: e.currentTarget,
-                  translateY: -12,
-                  scale: 1.08,
-                  duration: 400,
-                  easing: 'easeOutQuad',
-                })
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (typeof anime !== 'undefined') {
-                anime({
-                  targets: e.currentTarget,
-                  translateY: 0,
-                  scale: 1,
-                  duration: 400,
-                  easing: 'easeOutQuad',
-                })
-              }
-            }}
-          >
-            <div
-              style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(30px)',
-                WebkitBackdropFilter: 'blur(30px)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                borderRadius: '20px',
-                padding: 'clamp(1.5rem, 4vw, 2rem)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
-                position: 'relative',
-                zIndex: 1,
-                minHeight: '160px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                textAlign: 'center',
-                transition: 'all 0.3s ease',
-                overflow: 'hidden',
-              }}
-            >
-              {/* Apple-style reflection border effect */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: '1px',
-                  background: 'linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%)',
-                  pointerEvents: 'none',
-                  zIndex: 2,
-                }}
-              />
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <div
-                  style={{
-                    marginBottom: '0.75rem',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    minHeight: '40px',
-                  }}
-                >
-                  {skill.icon}
+          {/* Project Details */}
+          <div className="min-h-[300px] flex flex-col justify-center relative">
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={activeIndex}
+                custom={direction}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="space-y-6"
+              >
+                <div className="space-y-1">
+                  <span className="text-emerald-400 font-mono text-xs uppercase tracking-widest">
+                    {activeProject.category}
+                  </span>
+                  <h3 className="text-white text-5xl font-bold leading-tight">
+                    {activeProject.title}
+                  </h3>
                 </div>
-                <h3
-                  style={{
-                    fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
-                    fontWeight: 700,
-                    letterSpacing: '-0.02em',
-                    color: '#ffffff',
-                    marginBottom: '0.5rem',
-                  }}
-                >
-                  {skill.name}
-                </h3>
-                <p
-                  style={{
-                    fontSize: '0.7rem',
-                    color: '#aaaaaa',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    fontWeight: 500,
-                  }}
-                >
-                  {skill.category}
+
+                <p className="text-white/60 text-lg leading-relaxed max-w-md">
+                  {activeProject.description}
                 </p>
-              </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {activeProject.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 rounded-full border border-white/20 text-white/40 text-xs font-mono"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex gap-4 pt-4">
+                  {activeProject.liveUrl && (
+                    <a
+                      href={activeProject.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-6 py-2 bg-white text-black font-medium rounded-full hover:bg-emerald-400 transition-colors duration-300"
+                    >
+                      Live Demo
+                    </a>
+                  )}
+                  {activeProject.githubUrl && (
+                    <a
+                      href={activeProject.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-6 py-2 border border-white/30 text-white font-medium rounded-full hover:bg-white/10 transition-colors duration-300"
+                    >
+                      Source Code
+                    </a>
+                  )}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Navigation Controls */}
+          <div 
+            style={entranceStyle(400)}
+            className="flex items-center gap-8 pt-8"
+          >
+            <div className="flex gap-4">
+              <button
+                onClick={handlePrev}
+                className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-all duration-300 group"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="group-hover:-translate-x-1 transition-transform"
+                >
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+              </button>
+              <button
+                onClick={handleNext}
+                className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-all duration-300 group"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="group-hover:translate-x-1 transition-transform"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+            <div className="text-white/20 font-mono text-lg">
+              <span className="text-white font-bold">{String(activeIndex + 1).padStart(2, '0')}</span> / {String(projects.length).padStart(2, '0')}
             </div>
           </div>
-        ))}
+        </div>
+      </div>
+
+      {/* Right Column: Image Showcase (60%) */}
+      <div className="hidden md:block w-[60%] h-full relative overflow-hidden bg-zinc-900">
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={activeIndex}
+            src={activeProject.image}
+            alt={activeProject.title}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ 
+              opacity: hasAnimated ? 1 : 0, 
+              scale: hasAnimated ? 1 : 1.05 
+            }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute inset-0 w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-700"
+          />
+        </AnimatePresence>
+        {/* Subtle overlay for depth */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+      </div>
+
+      {/* Mobile Image Fallback (stacked) */}
+      <div className="md:hidden w-full h-[40vh] relative">
+        <img
+          src={activeProject.image}
+          alt={activeProject.title}
+          className="w-full h-full object-cover"
+        />
       </div>
     </section>
   )
 }
-

@@ -1,303 +1,212 @@
-import { useEffect, useRef, useState } from 'react'
-import anime from 'animejs'
+import { useState, useEffect } from 'react'
 import { useTheme } from '../context/ThemeContext'
 
+const navLinks = [
+  { id: 'genesis', label: 'THE GENESIS', chapter: 'I' },
+  { id: 'craft', label: 'THE CRAFT', chapter: 'II' },
+  { id: 'projects', label: 'THE ARTIFACTS', chapter: 'III' },
+  { id: 'contact', label: 'THE CONNECTION', chapter: 'IV' },
+]
+
 export default function Navigation() {
-  const navRef = useRef(null)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [activeChapter, setActiveChapter] = useState(navLinks[0])
   const { isDark, toggleTheme } = useTheme()
 
   useEffect(() => {
+    const container = document.querySelector('.scroll-container')
+    if (!container) return
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
+      const scrollPos = container.scrollTop
+      setIsScrolled(scrollPos > 50)
+      const idx = Math.round(
+        (scrollPos / (container.scrollHeight - container.clientHeight)) *
+        (navLinks.length - 1)
+      )
+      if (navLinks[idx]) setActiveChapter(navLinks[idx])
     }
 
-    window.addEventListener('scroll', handleScroll)
-    
-    // Animate nav on mount
-    if (navRef.current && navRef.current.children && typeof anime !== 'undefined') {
-      try {
-        // Set initial state
-        Array.from(navRef.current.children).forEach((child) => {
-          if (child.style) {
-            child.style.opacity = '0'
-            child.style.transform = 'translateY(-20px)'
-          }
-        })
-        
-        // Animate in
-        anime({
-          targets: navRef.current.children,
-          opacity: [0, 1],
-          translateY: [-20, 0],
-          delay: anime.stagger(100),
-          duration: 800,
-          easing: 'easeOutExpo',
-        })
-      } catch (error) {
-        // Fallback: make visible if animation fails
-        Array.from(navRef.current.children).forEach((child) => {
-          if (child.style) {
-            child.style.opacity = '1'
-            child.style.transform = 'translateY(0)'
-          }
-        })
-      }
-    }
-
-    return () => window.removeEventListener('scroll', handleScroll)
+    container.addEventListener('scroll', handleScroll)
+    return () => container.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const scrollTo = (id) => {
-    const element = document.getElementById(id)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-    }
+  const scrollToSection = (index) => {
+    const container = document.querySelector('.scroll-container')
+    if (!container) return
+    const total = container.scrollHeight - container.clientHeight
+    container.scrollTo({ top: (index / (navLinks.length - 1)) * total, behavior: 'smooth' })
   }
+
+  const pillExpanded = !isScrolled || isExpanded
 
   return (
     <nav
-      ref={navRef}
-      className={`nav ${isScrolled ? 'nav-scrolled' : ''}`}
+      onMouseEnter={() => setIsExpanded(true)}
+      onMouseLeave={() => setIsExpanded(false)}
       style={{
         position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1000,
-        padding: 'clamp(0.8rem, 2vw, 1.5rem) clamp(1rem, 3vw, 3rem)',
+        top: '2rem',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 100,
+
+        /* sizing — only maxWidth animates */
+        height: '48px',
+        maxWidth: pillExpanded ? '820px' : '300px',
+        width: 'max-content',
+
+        /* layout */
         display: 'flex',
-        justifyContent: 'space-between',
+        flexDirection: 'row',
         alignItems: 'center',
-        transition: 'all 0.3s ease',
-        background: isScrolled ? 'rgba(10, 10, 10, 0.8)' : 'transparent',
-        backdropFilter: isScrolled ? 'blur(20px)' : 'none',
-        borderBottom: isScrolled ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
+        gap: '0',
+        padding: '0 1.25rem',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+
+        /* look */
+        background: 'var(--pill-bg)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        border: '1px solid var(--pill-border)',
+        borderRadius: '999px',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+
+        /* spring transition on width only */
+        transition: [
+          'max-width 0.55s cubic-bezier(0.34,1.56,0.64,1)',
+          'padding   0.4s  ease',
+          'box-shadow 0.3s ease',
+        ].join(', '),
       }}
     >
-      <div
-        className="nav-logo"
-        onClick={() => scrollTo('hero')}
-        style={{
-          fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
-          fontWeight: 700,
-          cursor: 'pointer',
-          letterSpacing: '-0.02em',
-          color: '#ffffff',
-          opacity: 1,
-        }}
-      >
+      {/* ── Logo ── */}
+      <span style={{
+        fontWeight: 900,
+        fontSize: '1.1rem',
+        letterSpacing: '-0.04em',
+        color: 'var(--text)',
+        flexShrink: 0,
+        userSelect: 'none',
+      }}>
         ESFYQ
+      </span>
+
+      {/* ── Chapter indicator (only when scrolled) ── */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        marginLeft: '0.75rem',
+        paddingLeft: '0.75rem',
+        borderLeft: '1px solid var(--border)',
+        height: '16px',
+        flexShrink: 0,
+        opacity: isScrolled ? 1 : 0,
+        width: isScrolled ? 'auto' : 0,
+        overflow: 'hidden',
+        transition: 'opacity 0.3s ease, width 0.3s ease',
+      }}>
+        <span style={{ fontSize: '0.6rem', fontFamily: 'monospace', color: 'var(--accent)', flexShrink: 0 }}>
+          {activeChapter.chapter}
+        </span>
+        <span style={{ fontSize: '0.6rem', fontFamily: 'monospace', color: 'var(--text-muted)', flexShrink: 0 }}>
+          {activeChapter.label}
+        </span>
       </div>
 
-      {/* Desktop Navigation */}
-      <div
-        className="nav-links"
-        style={{
-          display: 'flex',
-          gap: 'clamp(1.5rem, 3vw, 3rem)',
-          listStyle: 'none',
-          alignItems: 'center',
-          '@media (max-width: 768px)': {
-            display: 'none',
-          },
-        }}
-      >
-        {['About', 'Projects', 'Contact'].map((item) => (
-          <li
-            key={item}
-            onClick={() => scrollTo(item.toLowerCase())}
-            className="nav-link"
+      {/* ── Nav links (visible when expanded) ── */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: '2rem',
+        marginLeft: pillExpanded ? '2rem' : '0',
+        maxWidth: pillExpanded ? '600px' : '0',
+        opacity: pillExpanded ? 1 : 0,
+        overflow: 'hidden',
+        pointerEvents: pillExpanded ? 'auto' : 'none',
+        flexShrink: 0,
+        transition: 'max-width 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease, margin 0.4s ease',
+      }}>
+        {navLinks.map((link, index) => (
+          <button
+            key={link.id}
+            onClick={() => scrollToSection(index)}
             style={{
+              background: 'none',
+              border: 'none',
               cursor: 'pointer',
-              fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
-              fontWeight: 400,
-              color: '#cccccc',
-              transition: 'color 0.3s ease',
-              opacity: 1,
+              padding: '0.25rem 0',
+              fontSize: '0.6rem',
+              fontWeight: 700,
+              letterSpacing: '0.15em',
+              color: activeChapter.id === link.id ? 'var(--text)' : 'var(--text-muted)',
+              flexShrink: 0,
               whiteSpace: 'nowrap',
+              transition: 'color 0.2s ease',
+              textDecoration: activeChapter.id === link.id ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
             }}
-            onMouseEnter={(e) => {
-              anime({
-                targets: e.target,
-                color: '#ffffff',
-                scale: 1.05,
-                duration: 200,
-              })
-            }}
-            onMouseLeave={(e) => {
-              anime({
-                targets: e.target,
-                color: '#cccccc',
-                scale: 1,
-                duration: 200,
-              })
-            }}
+            onMouseEnter={e => e.currentTarget.style.color = 'var(--text)'}
+            onMouseLeave={e => e.currentTarget.style.color = activeChapter.id === link.id ? 'var(--text)' : 'var(--text-muted)'}
           >
-            {item}
-          </li>
+            {link.label}
+          </button>
         ))}
-        
-        {/* Theme Toggle Button */}
-        <button
-          onClick={toggleTheme}
-          style={{
-            cursor: 'pointer',
-            fontSize: 'clamp(1rem, 2vw, 1.2rem)',
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            background: 'rgba(255, 255, 255, 0.1)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            color: '#ffffff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 0.3s ease',
-          }}
-          onMouseEnter={(e) => {
-            anime({
-              targets: e.target,
-              scale: 1.1,
-              duration: 200,
-            })
-          }}
-          onMouseLeave={(e) => {
-            anime({
-              targets: e.target,
-              scale: 1,
-              duration: 200,
-            })
-          }}
-          aria-label="Toggle theme"
-        >
-          {isDark ? '☀️' : '🌙'}
-        </button>
       </div>
 
-      {/* Mobile Menu Button & Theme Toggle */}
-      <div
+      {/* ── Theme toggle — always last, never clipped ── */}
+      <button
+        onClick={toggleTheme}
         style={{
-          display: 'none',
-          gap: '1rem',
+          marginLeft: 'auto',
+          paddingLeft: '0.75rem',
+          flexShrink: 0,
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          color: 'var(--text)',
+          display: 'flex',
           alignItems: 'center',
-          '@media (max-width: 768px)': {
-            display: 'flex',
-          },
+          justifyContent: 'center',
+          width: '2rem',
+          height: '2rem',
+          borderRadius: '50%',
+          transition: 'background 0.2s ease, transform 0.4s ease',
         }}
+        onMouseEnter={e => {
+          e.currentTarget.style.background = 'var(--surface)'
+          e.currentTarget.style.transform = 'rotate(180deg)'
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.background = 'none'
+          e.currentTarget.style.transform = 'rotate(0deg)'
+        }}
+        aria-label="Toggle theme"
       >
-        {/* Mobile Theme Toggle */}
-        <button
-          onClick={toggleTheme}
-          style={{
-            cursor: 'pointer',
-            fontSize: '1.2rem',
-            width: '36px',
-            height: '36px',
-            borderRadius: '50%',
-            background: 'rgba(255, 255, 255, 0.1)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            color: '#ffffff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 0.3s ease',
-          }}
-          onTouchStart={(e) => {
-            anime({
-              targets: e.target,
-              scale: 0.95,
-              duration: 100,
-            })
-          }}
-          onTouchEnd={(e) => {
-            anime({
-              targets: e.target,
-              scale: 1,
-              duration: 100,
-            })
-          }}
-          aria-label="Toggle theme"
-        >
-          {isDark ? '☀️' : '🌙'}
-        </button>
-
-        {/* Mobile Menu Toggle */}
-        <button
-          onClick={() => setIsMobileOpen(!isMobileOpen)}
-          style={{
-            cursor: 'pointer',
-            fontSize: '1.5rem',
-            width: '36px',
-            height: '36px',
-            borderRadius: '6px',
-            background: 'rgba(255, 255, 255, 0.1)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            color: '#ffffff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 0.3s ease',
-          }}
-        >
-          ☰
-        </button>
-      </div>
-
-      {/* Mobile Navigation Menu */}
-      {isMobileOpen && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '60px',
-            left: 0,
-            right: 0,
-            background: 'rgba(10, 10, 10, 0.95)',
-            backdropFilter: 'blur(20px)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
-            padding: '1.5rem',
-            borderRadius: '0 0 12px 12px',
-            zIndex: 999,
-          }}
-        >
-          {['About', 'Projects', 'Contact'].map((item) => (
-            <button
-              key={item}
-              onClick={() => {
-                scrollTo(item.toLowerCase())
-                setIsMobileOpen(false)
-              }}
-              style={{
-                cursor: 'pointer',
-                fontSize: '0.9rem',
-                fontWeight: 400,
-                color: '#cccccc',
-                background: 'none',
-                border: 'none',
-                padding: '0.75rem',
-                textAlign: 'left',
-                transition: 'color 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.color = '#ffffff'
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.color = '#cccccc'
-              }}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
-      )}
+        {isDark ? (
+          /* Sun */
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+        ) : (
+          /* Moon */
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        )}
+      </button>
     </nav>
   )
 }
-

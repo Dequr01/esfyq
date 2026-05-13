@@ -26,8 +26,8 @@ export default function Home() {
 
         <style>
           {`
-            html, body, #__next { height: 100%; background:#0f0f0f !important; }
-            body { margin: 0; background:#0f0f0f !important; }
+            html, body, #__next { height: 100%; background:transparent; }
+            body { margin: 0; background:transparent; }
 
             @media (prefers-reduced-motion: reduce) {
               * {

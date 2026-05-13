@@ -1,51 +1,16 @@
-import { useEffect, useRef } from 'react'
-import anime from 'animejs'
+import { useEffect, useRef, useState } from 'react'
 import GlassyCard from './GlassyCard'
 
 export default function About() {
+  const [hasAnimated, setHasAnimated] = useState(false)
   const sectionRef = useRef(null)
-  const titleRef = useRef(null)
-  const contentRef = useRef(null)
-  const skillsRef = useRef(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const timeline = anime.timeline({
-              easing: 'easeOutExpo',
-            })
-
-            timeline
-              .add({
-                targets: titleRef.current,
-                opacity: [0, 1],
-                translateY: [50, 0],
-                duration: 1000,
-              })
-              .add(
-                {
-                  targets: contentRef.current?.children,
-                  opacity: [0, 1],
-                  translateX: [-30, 0],
-                  delay: anime.stagger(100),
-                  duration: 800,
-                },
-                '-=500'
-              )
-              .add(
-                {
-                  targets: skillsRef.current?.children,
-                  opacity: [0, 1],
-                  scale: [0.8, 1],
-                  delay: anime.stagger(50),
-                  duration: 600,
-                },
-                '-=400'
-              )
-            
-            // Unobserve after animation triggers once
+          if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true)
             observer.unobserve(entry.target)
           }
         })
@@ -62,224 +27,89 @@ export default function About() {
         observer.unobserve(sectionRef.current)
       }
     }
-  }, [])
+  }, [hasAnimated])
 
   const skills = [
-    'Python',
-    'React',
-    'TensorFlow Lite',
-    'OpenCV',
-    'TailwindCSS',
-    'PostgreSQL',
-    'Hugging Face',
-    'OSINT',
-    'AI Prompt Engineering',
-    'Vite',
-    'Git',
-    'Automation',
+    'Python', 'React', 'TensorFlow Lite', 'OpenCV', 'TailwindCSS', 
+    'PostgreSQL', 'Hugging Face', 'OSINT', 'AI Prompt Engineering', 
+    'Vite', 'Git', 'Automation'
   ]
+
+  const entranceStyle = (delay) => ({
+    opacity: hasAnimated ? 1 : 0,
+    transform: hasAnimated ? 'translateY(0)' : 'translateY(30px)',
+    transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`
+  })
 
   return (
     <section
       id="about"
       ref={sectionRef}
-      style={{
-        minHeight: 'auto',
-        padding: 'clamp(1rem, 4vw, 2rem) clamp(1.5rem, 4vw, 4rem)',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        background: 'transparent',
-        position: 'relative',
-        zIndex: 1,
-        boxSizing: 'border-box',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        opacity: 1,
-        transition: 'opacity 0.5s ease, transform 0.5s ease',
-      }}
+      className="w-full h-full flex flex-col justify-center p-8 md:p-16 bg-transparent relative z-10"
+      style={{ maxWidth: '1400px', margin: '0 auto' }}
     >
-      <h2
-        ref={titleRef}
-        style={{
-          fontSize: 'clamp(2.5rem, 6vw, 4rem)',
-          fontWeight: 700,
-          marginBottom: 'clamp(2rem, 4vw, 3rem)',
-          letterSpacing: '-0.03em',
-          opacity: 0,
-        }}
-      >
-        About
-      </h2>
-
-      <div
-        ref={contentRef}
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))',
-          gap: 'clamp(1.5rem, 3vw, 2.5rem)',
-          marginBottom: '0',
-        }}
-      >
-        {/* ===== ABOUT CARD #1: WHO I AM ===== */}
-        {/* Edit this card for mobile - GlassyCard component in this div */}
-        <GlassyCard style={{ opacity: 0 }}>
-          <h3
-            style={{
-              fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
-              fontWeight: 600,
-              marginBottom: '1.5rem',
-              letterSpacing: '-0.02em',
-              color: '#ffffff',
-            }}
-          >
-            Who I Am
-          </h3>
-          <p
-            style={{
-              fontSize: 'clamp(1rem, 2vw, 1.1rem)',
-              lineHeight: 1.8,
-              color: '#e8e8e8',
-            }}
-          >
-            I'm IamCodebreaker, an AI and Python developer passionate about building intelligent
-            solutions. Specialized in machine learning, OSINT automation, and offline AI systems.
-            I transform complex problems into elegant, efficient code.
-          </p>
-        </GlassyCard>
-
-        {/* ===== ABOUT CARD #2: WHAT I DO ===== */}
-        {/* Edit this card for mobile - GlassyCard component in this div */}
-        <GlassyCard style={{ opacity: 0 }}>
-          <h3
-            style={{
-              fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
-              fontWeight: 600,
-              marginBottom: '1.5rem',
-              letterSpacing: '-0.02em',
-              color: '#ffffff',
-            }}
-          >
-            What I Do
-          </h3>
-          <p
-            style={{
-              fontSize: 'clamp(1rem, 2vw, 1.1rem)',
-              lineHeight: 1.8,
-              color: '#e8e8e8',
-            }}
-          >
-            I specialize in AI model fine-tuning, OSINT automation, offline ML systems, and
-            full-stack development. From custom AI assistants to reverse image search tools,
-            I deliver privacy-first, intelligent applications.
-          </p>
-        </GlassyCard>
-
-        {/* ===== ABOUT CARD #3: MY APPROACH ===== */}
-        {/* Edit this card for mobile - GlassyCard component in this div */}
-        <GlassyCard style={{ opacity: 0 }}>
-          <h3
-            style={{
-              fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
-              fontWeight: 600,
-              marginBottom: '1.5rem',
-              letterSpacing: '-0.02em',
-              color: '#ffffff',
-            }}
-          >
-            My Approach
-          </h3>
-          <p
-            style={{
-              fontSize: 'clamp(1rem, 2vw, 1.1rem)',
-              lineHeight: 1.8,
-              color: '#e8e8e8',
-            }}
-          >
-            I focus on clean, maintainable code with performance-first architecture. Every
-            project combines cutting-edge AI capabilities with practical automation, delivering
-            solutions that are both intelligent and reliable.
-          </p>
-        </GlassyCard>
+      <div className="mb-12">
+        <span 
+          style={entranceStyle(0)}
+          className="text-[var(--accent)] font-mono text-xs uppercase tracking-widest block mb-4"
+        >
+          II — THE CRAFT
+        </span>
+        <h2
+          style={entranceStyle(100)}
+          className="text-[var(--text)] text-4xl md:text-5xl font-bold tracking-tight"
+        >
+          The Craft of Creation.
+        </h2>
       </div>
 
-      <div style={{ opacity: 0, marginTop: '0.5rem' }}>
-        <h3
-          style={{
-            fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
-            fontWeight: 600,
-            marginBottom: '1rem',
-            letterSpacing: '-0.02em',
-            color: '#ffffff',
-          }}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <div style={entranceStyle(150)}>
+          <GlassyCard>
+            <h3 className="text-[var(--text)] text-xl font-bold mb-4">Who I Am</h3>
+            <p className="text-[var(--text-secondary)] leading-relaxed text-sm">
+              I'm IamCodebreaker, an AI and Python developer passionate about building intelligent
+              solutions. Specialized in machine learning, OSINT automation, and offline AI systems.
+            </p>
+          </GlassyCard>
+        </div>
+
+        <div style={entranceStyle(300)}>
+          <GlassyCard>
+            <h3 className="text-[var(--text)] text-xl font-bold mb-4">What I Do</h3>
+            <p className="text-[var(--text-secondary)] leading-relaxed text-sm">
+              I specialize in AI model fine-tuning, OSINT automation, offline ML systems, and
+              full-stack development. Delivering privacy-first, intelligent applications.
+            </p>
+          </GlassyCard>
+        </div>
+
+        <div style={entranceStyle(450)}>
+          <GlassyCard>
+            <h3 className="text-[var(--text)] text-xl font-bold mb-4">My Approach</h3>
+            <p className="text-[var(--text-secondary)] leading-relaxed text-sm">
+              I focus on clean, maintainable code with performance-first architecture. Every
+              project combines cutting-edge AI capabilities with practical automation.
+            </p>
+          </GlassyCard>
+        </div>
+      </div>
+
+      <div className="space-y-6">
+        <h3 
+          style={entranceStyle(600)}
+          className="text-[var(--text-muted)] font-mono text-[10px] uppercase tracking-[0.3em]"
         >
-          Skills & Technologies
+          Expertise & Stack
         </h3>
-        <div
-          ref={skillsRef}
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '0.75rem',
-          }}
-        >
+        <div className="flex flex-wrap gap-3">
           {skills.map((skill, index) => (
             <div
-              key={index}
-              style={{
-                position: 'relative',
-                overflow: 'hidden',
-                borderRadius: '50px',
-              }}
-              onMouseEnter={(e) => {
-                anime({
-                  targets: e.currentTarget,
-                  scale: 1.08,
-                  duration: 200,
-                })
-              }}
-              onMouseLeave={(e) => {
-                anime({
-                  targets: e.currentTarget,
-                  scale: 1,
-                  duration: 200,
-                })
-              }}
+              key={skill}
+              style={entranceStyle(700 + (index * 50))}
+              className="px-5 py-2 bg-[var(--surface)] border border-[var(--border)] backdrop-blur-xl rounded-full text-[var(--text-muted)] text-xs font-medium hover:text-[var(--text)] hover:border-[var(--text-secondary)] transition-all duration-300"
             >
-              <span
-                style={{
-                  padding: '0.65rem 1.25rem',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  backdropFilter: 'blur(30px)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '50px',
-                  fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)',
-                  color: '#f5f5f5',
-                  fontWeight: 500,
-                  opacity: 0,
-                  cursor: 'default',
-                  display: 'block',
-                  whiteSpace: 'nowrap',
-                  position: 'relative',
-                  zIndex: 1,
-                  boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-                }}
-              >
-                {skill}
-              </span>
-              {/* Apple reflection effect */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: '1px',
-                  background: 'linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%)',
-                  pointerEvents: 'none',
-                  zIndex: 2,
-                }}
-              />
+              {skill}
             </div>
           ))}
         </div>
@@ -287,4 +117,3 @@ export default function About() {
     </section>
   )
 }
-
