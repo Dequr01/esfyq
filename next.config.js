@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack(config) {
     config.module.rules.push({
@@ -8,21 +7,6 @@ const nextConfig = {
 
     return config;
   },
-
-  experimental: {
-    turbo: {
-      rules: {
-        '*.glb': {
-          loaders: ['file-loader'],
-          as: '*.js',
-        },
-        '*.gltf': {
-          loaders: ['file-loader'],
-          as: '*.js',
-        },
-      },
-    },
-  },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
