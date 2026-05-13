@@ -6,14 +6,7 @@ import { Environment, PerspectiveCamera } from '@react-three/drei'
 import * as THREE from 'three'
 import { useTheme } from '../context/ThemeContext'
 
-import mazdaRx7SpiritR from '../assets/2002_mazda_rx-7_spirit_r_type_a_fd.glb?url'
-import hondaNsx from '../assets/1992_honda_nsx_type-r.glb?url'
-import porsche911 from '../assets/porsche_911_gt1_straenversion_www.vecarz.com.glb?url'
-import porsche917k from '../assets/porsche_917k_lm_red.glb?url'
-import studio from '../assets/studio.glb?url'
-import kuromi from '../assets/kuromi.glb?url'
-import baymax from '../assets/baymaxnanoblock.glb?url'
-// Removed minecraft model
+const porsche911 = '/models/porsche_911_gt1_straenversion_www.vecarz.com.glb'
 
 
 const isMobile = () => {
