@@ -63,7 +63,7 @@ export default function Projects() {
           opacity: hasAnimated ? 1 : 0,
           transition: 'all 1s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
-        className="w-full md:w-[40%] h-full flex flex-col justify-center p-6 md:p-16 z-10 relative bg-black/60 backdrop-blur-3xl border-r border-white/10"
+        className="w-full md:w-[40%] h-full flex flex-col justify-center p-6 md:p-16 z-10 relative bg-black/60 backdrop-blur-1xl border-r border-white/10"
       >
         <div className="flex flex-col gap-8">
           {/* Section Header */}

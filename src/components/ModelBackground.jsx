@@ -42,7 +42,7 @@ function Model({ url, isMobile, metalness, roughness, envMapIntensity }) {
     const bbox = new THREE.Box3().setFromObject(clone)
     const size = bbox.getSize(new THREE.Vector3())
     const maxDim = Math.max(size.x, size.y, size.z)
-    const targetSize = isMobile ? 14 : 12 // Much bigger robot
+    const targetSize = isMobile ? 14 : 12
     const scale = targetSize / Math.max(maxDim, 0.01)
     clone.scale.setScalar(scale)
 
@@ -99,30 +99,97 @@ function Scene({ modelUrl, isMobile, scrollProgress }) {
   }, [scrollProgress])
 
   // --- CAMERA SCROLL POINTS (NARRATIVE CHAPTERS) ---
-  // --- CAMERA SCROLL POINTS (NARRATIVE CHAPTERS) ---
   const scrollPoints = useMemo(() => {
+    // const basePoints = [
+    //   {
+    //     scroll: 0,
+    //     position: [0, 4, 25],     // Chapter 1: The Genesis - Wide shot
+    //     lookAt: [0, 0, 0]
+    //   },
+    //   {
+    //     scroll: 0.33,
+    //     position: [-15, 2, 5],    // Chapter 2: The Craft - Left close-up
+    //     lookAt: [0, 1, 0]
+    //   },
+    //   {
+    //     scroll: 0.66,
+    //     position: [15, 8, 12],    // Chapter 3: The Artifacts - High angle
+    //     lookAt: [0, 0, 0]
+    //   },
+    //   {
+    //     scroll: 1.0,
+    //     position: [0, 0, 18],    // Chapter 4: The Connection - Low angle
+    //     lookAt: [0, 2, 0]
+    //   }
+    // ]
+
     const basePoints = [
       {
         scroll: 0,
-        position: [0, 4, 25],     // Chapter 1: The Genesis - Wide shot
+        position: [0, 4, 25],        // Wide establishing shot — full car in frame, feels grand
         lookAt: [0, 0, 0]
       },
       {
-        scroll: 0.33,
-        position: [-15, 2, 5],    // Chapter 2: The Craft - Left close-up
+        scroll: 0.08,
+        position: [0, 1.5, 14],      // Slow push-in — camera drifts toward the front, tension builds
+        lookAt: [0, 0.5, 0]
+      },
+      {
+        scroll: 0.15,
+        position: [-8, 0.5, 8],      // Low front-left corner — hood line, headlight detail
+        lookAt: [0, 0.8, 0]
+      },
+      {
+        scroll: 0.25,
+        position: [-14, 1, 2],       // Driver's side profile close — door, mirrors, haunch
         lookAt: [0, 1, 0]
       },
       {
-        scroll: 0.66,
-        position: [15, 8, 12],    // Chapter 3: The Artifacts - High angle
+        scroll: 0.33,
+        position: [-15, 2, 5],       // Classic left beauty angle — wide enough to see the whole flank
+        lookAt: [0, 1, 0]
+      },
+      {
+        scroll: 0.42,
+        position: [-10, 6, -2],      // Rising over the roof — dramatic top-down sweep from left
         lookAt: [0, 0, 0]
       },
       {
+        scroll: 0.50,
+        position: [0, 9, -10],       // Rear high shot — GT1 rear wing and diffuser, very cinematic
+        lookAt: [0, 1, 0]
+      },
+      {
+        scroll: 0.58,
+        position: [12, 1, -6],       // Low rear-right — exhaust, haunches, aggression
+        lookAt: [0, 0.5, 0]
+      },
+      {
+        scroll: 0.66,
+        position: [15, 8, 12],       // High right angle — elevated, shows the whole car from above
+        lookAt: [0, 0, 0]
+      },
+      {
+        scroll: 0.75,
+        position: [10, 0.3, 10],     // Ground-level right side — wheel arch, tire, road-hugging stance
+        lookAt: [0, 0.5, 0]
+      },
+      {
+        scroll: 0.84,
+        position: [4, 0.5, 12],      // Low front-right — near the bumper, intimate and powerful
+        lookAt: [0, 1, 0]
+      },
+      {
+        scroll: 0.92,
+        position: [0, 2, 16],        // Slow pull back to center — preparing for the final reveal
+        lookAt: [0, 1, 0]
+      },
+      {
         scroll: 1.0,
-        position: [0, -2, 18],    // Chapter 4: The Connection - Low angle
-        lookAt: [0, 2, 0]
+        position: [0, 1, 20],        // Final hero shot — centered, low, slightly closer than the open
+        lookAt: [0, 1.5, 0]          // Looking slightly up = car feels dominant, powerful
       }
-    ]
+    ];
 
     if (isMobile) {
       // Shift camera higher and further back on mobile to move model lower in frame
