@@ -7,7 +7,7 @@ import * as THREE from 'three'
 import { useControls, folder, Leva } from 'leva'
 import { useTheme } from '../context/ThemeContext'
 
-const porsche911 = '/models/porsche_911_gt1_straenversion_www.vecarz.com.glb'
+const porsche911 = '/models/porsche_917k_lm_red.glb'
 
 
 const isMobile = () => {
