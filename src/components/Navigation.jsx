@@ -99,7 +99,7 @@ export default function Navigation() {
         flexShrink: 0,
         userSelect: 'none',
       }}>
-        ESFYQ
+        Esfyq_
       </span>
 
       {/* ── Chapter indicator (only when scrolled) ── */}

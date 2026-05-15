@@ -85,7 +85,7 @@ export default function Hero() {
         <GlassyCard style={{ 
           textAlign: 'center', 
           width: mobile ? '100%' : 'auto',
-          maxWidth: '800px',
+          maxWidth: mobile ? '100%' : '1200px',
           background: 'rgba(0, 0, 0, 0.2)', /* Ultra-subtle to maintain blend mode */
         }}>
           <h1 style={{
