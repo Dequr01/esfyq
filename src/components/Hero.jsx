@@ -1,8 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
+import GlassyCard from './GlassyCard'
 
 export default function Hero() {
   const [hasAnimated, setHasAnimated] = useState(false)
+  const [mobile, setMobile] = useState(false)
   const heroRef = useRef(null)
+
+  useEffect(() => {
+    const checkMobile = () => setMobile(window.innerWidth <= 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -57,87 +66,92 @@ export default function Hero() {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '2rem',
+        padding: mobile ? '6rem 1.5rem 2rem' : '2rem',
         background: 'transparent',
         position: 'relative',
-        overflow: 'visible',  /* MUST be visible — hidden kills blend mode */
-        zIndex: 'auto',     /* MUST be auto — any number creates stacking context */
+        overflow: 'visible',
+        zIndex: 'auto',
       }}
     >
       <div style={{
         maxWidth: '1200px',
         width: '100%',
-        textAlign: 'center',
-        padding: '0 1rem',
+        display: 'flex',
+        justifyContent: 'center',
         background: 'transparent',
-        overflow: 'visible',      /* MUST be visible */
-        zIndex: 'auto',         /* MUST be auto */
+        overflow: 'visible',
+        zIndex: 'auto',
       }}>
-
-        <h1 style={{
-          ...fadeUp(0),
-          ...blend,
-          fontSize: 'clamp(2.5rem, 8vw, 6.5rem)',
-          fontWeight: 800,
-          lineHeight: 1.1,
-          marginBottom: '1.5rem',
-          letterSpacing: '-0.04em',
+        <GlassyCard style={{ 
+          textAlign: 'center', 
+          width: mobile ? '100%' : 'auto',
+          maxWidth: '800px',
+          background: 'rgba(0, 0, 0, 0.2)', /* Ultra-subtle to maintain blend mode */
         }}>
-          Bringing ideas to life
-        </h1>
+          <h1 style={{
+            ...fadeUp(0),
+            ...blend,
+            fontSize: 'clamp(2.5rem, 8vw, 6.5rem)',
+            fontWeight: 800,
+            lineHeight: 1.1,
+            marginBottom: '1.5rem',
+            letterSpacing: '-0.04em',
+          }}>
+            Bringing ideas to life
+          </h1>
 
-        <h2 style={{
-          ...fadeUp(150),
-          ...blend,
-          fontSize: 'clamp(0.9rem, 2.5vw, 1.5rem)',
-          fontWeight: 300,
-          marginBottom: '2rem',
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-        }}>
-          Good code is like poetry...
-        </h2>
+          <h2 style={{
+            ...fadeUp(150),
+            ...blend,
+            fontSize: 'clamp(0.9rem, 2.5vw, 1.5rem)',
+            fontWeight: 300,
+            marginBottom: '2rem',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+          }}>
+            Good code is like poetry...
+          </h2>
 
-        <p style={{
-          ...fadeUp(250),
-          ...blend,
-          fontSize: 'clamp(0.95rem, 1.8vw, 1.1rem)',
-          lineHeight: 1.6,
-          maxWidth: '560px',
-          margin: '0 auto 3rem',
-        }}>
-          Architecting high-performance digital experiences with precision and passion.
-        </p>
+          <p style={{
+            ...fadeUp(250),
+            ...blend,
+            fontSize: 'clamp(0.85rem, 4vw, 1.1rem)',
+            lineHeight: 1.6,
+            maxWidth: '560px',
+            margin: '0 auto 2rem',
+          }}>
+            Architecting high-performance digital experiences with precision and passion.
+          </p>
 
-        {/* CTA button — intentionally NO blend mode */}
-        <div style={{ ...fadeUp(350), display: 'inline-block' }}>
-          <button
-            onClick={scrollToProjects}
-            style={{
-              padding: '1rem 2.5rem',
-              fontSize: '0.85rem',
-              fontWeight: 500,
-              color: 'var(--text)',
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: '999px',
-              backdropFilter: 'blur(10px)',
-              cursor: 'pointer',
-              transition: 'background 0.4s ease, color 0.4s ease',
-              letterSpacing: '0.05em',
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.background = 'var(--text)'
-              e.currentTarget.style.color = 'var(--bg)'
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.background = 'var(--surface)'
-              e.currentTarget.style.color = 'var(--text)'
-            }}
-          >
-            View My Work
-          </button>
-        </div>
+          <div style={{ ...fadeUp(350), display: 'inline-block', marginBottom: '1rem' }}>
+            <button
+              onClick={scrollToProjects}
+              style={{
+                padding: '0.8rem 2rem',
+                fontSize: '0.8rem',
+                fontWeight: 500,
+                color: 'var(--text)',
+                background: 'var(--surface)',
+                border: '1px solid var(--border)',
+                borderRadius: '999px',
+                backdropFilter: 'blur(10px)',
+                cursor: 'pointer',
+                transition: 'background 0.4s ease, color 0.4s ease',
+                letterSpacing: '0.05em',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'var(--text)'
+                e.currentTarget.style.color = 'var(--bg)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'var(--surface)'
+                e.currentTarget.style.color = 'var(--text)'
+              }}
+            >
+              View My Work
+            </button>
+          </div>
+        </GlassyCard>
       </div>
 
       {/* Scroll indicator */}

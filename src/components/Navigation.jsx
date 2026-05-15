@@ -12,7 +12,15 @@ export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [activeChapter, setActiveChapter] = useState(navLinks[0])
+  const [mobile, setMobile] = useState(false)
   const { isDark, toggleTheme } = useTheme()
+
+  useEffect(() => {
+    const checkMobile = () => setMobile(window.innerWidth <= 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     const container = document.querySelector('.scroll-container')
@@ -47,22 +55,22 @@ export default function Navigation() {
       onMouseLeave={() => setIsExpanded(false)}
       style={{
         position: 'fixed',
-        top: '2rem',
+        top: mobile ? '1rem' : '2rem',
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 100,
 
         /* sizing — only maxWidth animates */
         height: '48px',
-        maxWidth: pillExpanded ? '820px' : '300px',
-        width: 'max-content',
+        maxWidth: mobile ? '95%' : (pillExpanded ? '820px' : '300px'),
+        width: mobile ? 'calc(100% - 2rem)' : 'max-content',
 
         /* layout */
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         gap: '0',
-        padding: '0 1.25rem',
+        padding: mobile ? '0 0.75rem' : '0 1.25rem',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
 
@@ -85,7 +93,7 @@ export default function Navigation() {
       {/* ── Logo ── */}
       <span style={{
         fontWeight: 900,
-        fontSize: '1.1rem',
+        fontSize: mobile ? '0.9rem' : '1.1rem',
         letterSpacing: '-0.04em',
         color: 'var(--text)',
         flexShrink: 0,
@@ -99,38 +107,40 @@ export default function Navigation() {
         display: 'flex',
         alignItems: 'center',
         gap: '0.5rem',
-        marginLeft: '0.75rem',
-        paddingLeft: '0.75rem',
+        marginLeft: mobile ? '0.5rem' : '0.75rem',
+        paddingLeft: mobile ? '0.5rem' : '0.75rem',
         borderLeft: '1px solid var(--border)',
         height: '16px',
         flexShrink: 0,
-        opacity: isScrolled ? 1 : 0,
-        width: isScrolled ? 'auto' : 0,
+        opacity: (isScrolled || mobile) ? 1 : 0,
+        width: (isScrolled || mobile) ? 'auto' : 0,
         overflow: 'hidden',
         transition: 'opacity 0.3s ease, width 0.3s ease',
       }}>
         <span style={{ fontSize: '0.6rem', fontFamily: 'monospace', color: 'var(--accent)', flexShrink: 0 }}>
           {activeChapter.chapter}
         </span>
-        <span style={{ fontSize: '0.6rem', fontFamily: 'monospace', color: 'var(--text-muted)', flexShrink: 0 }}>
-          {activeChapter.label}
-        </span>
+        {!mobile && (
+          <span style={{ fontSize: '0.6rem', fontFamily: 'monospace', color: 'var(--text-muted)', flexShrink: 0 }}>
+            {activeChapter.label}
+          </span>
+        )}
       </div>
 
-      {/* ── Nav links (visible when expanded) ── */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: '2rem',
-        marginLeft: pillExpanded ? '2rem' : '0',
-        maxWidth: pillExpanded ? '600px' : '0',
-        opacity: pillExpanded ? 1 : 0,
-        overflow: 'hidden',
-        pointerEvents: pillExpanded ? 'auto' : 'none',
-        flexShrink: 0,
-        transition: 'max-width 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease, margin 0.4s ease',
-      }}>
+      {!mobile && (
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: '2rem',
+          marginLeft: pillExpanded ? '2rem' : '0',
+          maxWidth: pillExpanded ? '600px' : '0',
+          opacity: pillExpanded ? 1 : 0,
+          overflow: 'hidden',
+          pointerEvents: pillExpanded ? 'auto' : 'none',
+          flexShrink: 0,
+          transition: 'max-width 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease, margin 0.4s ease',
+        }}>
         {navLinks.map((link, index) => (
           <button
             key={link.id}
@@ -157,6 +167,7 @@ export default function Navigation() {
           </button>
         ))}
       </div>
+      )}
 
       {/* ── Theme toggle — always last, never clipped ── */}
       <button

@@ -175,3 +175,7 @@ section {
     @apply font-sans;
   }
 }
+
+section {
+  scroll-margin-top: 80px;
+}

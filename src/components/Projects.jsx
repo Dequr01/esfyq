@@ -57,13 +57,13 @@ export default function Projects() {
       className="w-screen h-screen relative flex flex-col md:flex-row overflow-hidden bg-transparent"
     >
       {/* Left Column: Project Info (40%) */}
-      <div 
+      <div
         style={{
           transform: hasAnimated ? 'translateX(0)' : 'translateX(-40px)',
           opacity: hasAnimated ? 1 : 0,
           transition: 'all 1s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
-        className="w-full md:w-[40%] h-full flex flex-col justify-center p-8 md:p-16 z-10 relative bg-black/60 backdrop-blur-3xl border-r border-white/10"
+        className="w-full md:w-[40%] h-full flex flex-col justify-center p-6 md:p-16 z-10 relative bg-black/60 backdrop-blur-3xl border-r border-white/10"
       >
         <div className="flex flex-col gap-8">
           {/* Section Header */}
@@ -71,7 +71,7 @@ export default function Projects() {
             <span className="text-white/40 font-mono text-sm tracking-widest uppercase">
               III — THE ARTIFACTS
             </span>
-            <h2 className="text-white text-5xl md:text-6xl font-bold tracking-tight">
+            <h2 className="text-white text-3xl md:text-6xl font-bold tracking-tight">
               Selected Work.
             </h2>
           </div>
@@ -92,7 +92,7 @@ export default function Projects() {
                   <span className="text-emerald-400 font-mono text-xs uppercase tracking-widest">
                     {activeProject.category}
                   </span>
-                  <h3 className="text-white text-5xl font-bold leading-tight">
+                  <h3 className="text-white text-3xl md:text-5xl font-bold leading-tight">
                     {activeProject.title}
                   </h3>
                 </div>
@@ -139,9 +139,9 @@ export default function Projects() {
           </div>
 
           {/* Navigation Controls */}
-          <div 
+          <div
             style={entranceStyle(400)}
-            className="flex items-center gap-8 pt-8"
+            className="flex items-center gap-8 pt-4 md:pt-8"
           >
             <div className="flex gap-4">
               <button
@@ -198,9 +198,9 @@ export default function Projects() {
             src={activeProject.image}
             alt={activeProject.title}
             initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ 
-              opacity: hasAnimated ? 1 : 0, 
-              scale: hasAnimated ? 1 : 1.05 
+            animate={{
+              opacity: hasAnimated ? 1 : 0,
+              scale: hasAnimated ? 1 : 1.05
             }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}

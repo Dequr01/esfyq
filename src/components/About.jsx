@@ -3,7 +3,15 @@ import GlassyCard from './GlassyCard'
 
 export default function About() {
   const [hasAnimated, setHasAnimated] = useState(false)
+  const [mobile, setMobile] = useState(false)
   const sectionRef = useRef(null)
+
+  useEffect(() => {
+    const checkMobile = () => setMobile(window.innerWidth <= 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -30,8 +38,8 @@ export default function About() {
   }, [hasAnimated])
 
   const skills = [
-    'Python', 'React', 'TensorFlow Lite', 'OpenCV', 'TailwindCSS', 
-    'PostgreSQL', 'Hugging Face', 'OSINT', 'AI Prompt Engineering', 
+    'Python', 'React', 'TensorFlow Lite', 'OpenCV', 'TailwindCSS',
+    'PostgreSQL', 'Hugging Face', 'OSINT', 'AI Prompt Engineering',
     'Vite', 'Git', 'Automation'
   ]
 
@@ -45,25 +53,25 @@ export default function About() {
     <section
       id="about"
       ref={sectionRef}
-      className="w-full h-full flex flex-col justify-center p-8 md:p-16 bg-transparent relative z-10"
+      className={`w-full h-full flex flex-col justify-center ${mobile ? 'p-6 pt-16' : 'p-8 md:p-16'} bg-transparent relative z-10`}
       style={{ maxWidth: '1400px', margin: '0 auto' }}
     >
-      <div className="mb-12">
-        <span 
+      <div className={mobile ? 'mb-6' : 'mb-12'}>
+        <span
           style={entranceStyle(0)}
-          className="text-[var(--accent)] font-mono text-xs uppercase tracking-widest block mb-4"
+          className="text-[var(--accent)] font-mono text-xs uppercase tracking-widest block mb-2"
         >
           II — THE CRAFT
         </span>
         <h2
           style={entranceStyle(100)}
-          className="text-[var(--text)] text-4xl md:text-5xl font-bold tracking-tight"
+          className={`text-[var(--text)] ${mobile ? 'text-2xl' : 'text-4xl md:text-5xl'} font-bold tracking-tight`}
         >
           The Craft of Creation.
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+      <div className={`grid grid-cols-1 md:grid-cols-3 ${mobile ? 'gap-4 mb-8' : 'gap-8 mb-16'}`}>
         <div style={entranceStyle(150)}>
           <GlassyCard>
             <h3 className="text-[var(--text)] text-xl font-bold mb-4">Who I Am</h3>
@@ -96,18 +104,18 @@ export default function About() {
       </div>
 
       <div className="space-y-6">
-        <h3 
+        <h3
           style={entranceStyle(600)}
           className="text-[var(--text-muted)] font-mono text-[10px] uppercase tracking-[0.3em]"
         >
           Expertise & Stack
         </h3>
-        <div className="flex flex-wrap gap-3">
+        <div className={`flex flex-wrap ${mobile ? 'gap-2' : 'gap-3'}`}>
           {skills.map((skill, index) => (
             <div
               key={skill}
               style={entranceStyle(700 + (index * 50))}
-              className="px-5 py-2 bg-[var(--surface)] border border-[var(--border)] backdrop-blur-xl rounded-full text-[var(--text-muted)] text-xs font-medium hover:text-[var(--text)] hover:border-[var(--text-secondary)] transition-all duration-300"
+              className={`px-4 py-1.5 bg-[var(--surface)] border border-[var(--border)] backdrop-blur-xl rounded-full text-[var(--text-muted)] ${mobile ? 'text-[10px]' : 'text-xs'} font-medium hover:text-[var(--text)] hover:border-[var(--text-secondary)] transition-all duration-300`}
             >
               {skill}
             </div>

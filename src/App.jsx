@@ -16,7 +16,7 @@ import { ThemeProvider } from './context/ThemeContext'
 function App() {
   const [modelLoaded, setModelLoaded] = useState(false)
   const containerRef = useRef(null)
-  
+
   const { scrollYProgress } = useScroll({
     container: containerRef
   })

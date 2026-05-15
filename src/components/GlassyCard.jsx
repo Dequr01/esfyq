@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function GlassyCard({ children, style = {}, className = "" }) {
   const baseStyle = {
-    padding: 'clamp(1.5rem, 4vw, 2rem)',
+    padding: 'clamp(1rem, 3vw, 1.5rem)',
     background: 'var(--surface)',
     border: '1px solid var(--border)',
     borderRadius: '1.25rem',

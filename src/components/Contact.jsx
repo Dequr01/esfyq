@@ -3,8 +3,16 @@ import GlassyCard from './GlassyCard'
 
 export default function Contact() {
   const [hasAnimated, setHasAnimated] = useState(false)
+  const [mobile, setMobile] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const sectionRef = useRef(null)
+
+  useEffect(() => {
+    const checkMobile = () => setMobile(window.innerWidth <= 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -58,17 +66,17 @@ export default function Contact() {
     <section
       id="contact"
       ref={sectionRef}
-      className="w-full h-full flex flex-col justify-center items-center p-8 bg-transparent relative z-10"
-      style={{ maxWidth: '600px', margin: '0 auto', paddingTop: '10rem' }}
+      className={`w-full h-full flex flex-col justify-center items-center ${mobile ? 'p-6 pt-24' : 'p-8'} bg-transparent relative z-10`}
+      style={{ maxWidth: '600px', margin: '0 auto' }}
     >
-      <div 
+      <div
         style={entranceStyle(0)}
         className="w-full text-center mb-10"
       >
         <span className="text-[var(--accent)] font-mono text-xs uppercase tracking-widest block mb-4">
           IV — THE CONNECTION
         </span>
-        <h2 className="text-[var(--text)] text-4xl md:text-5xl font-bold tracking-tight mb-4">
+        <h2 className={`text-[var(--text)] ${mobile ? 'text-3xl' : 'text-4xl md:text-5xl'} font-bold tracking-tight mb-4`}>
           Get in Touch.
         </h2>
         <p className="text-[var(--text-muted)] text-sm max-w-xs mx-auto">
@@ -76,7 +84,7 @@ export default function Contact() {
         </p>
       </div>
 
-      <div 
+      <div
         style={entranceStyle(200)}
         className="w-full"
       >
@@ -133,7 +141,7 @@ export default function Contact() {
         </form>
       </div>
 
-      <div 
+      <div
         style={entranceStyle(700)}
         className="flex gap-6 mt-8"
       >

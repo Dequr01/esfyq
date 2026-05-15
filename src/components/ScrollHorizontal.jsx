@@ -23,7 +23,13 @@ export default function ScrollHorizontal({ children, containerRef, scrollYProgre
                 ref={containerRef} 
                 className="scroll-container"
             >
-                <div className="scroll-spacer" style={{ height: `calc(${childrenCount} * 100vh)` }}>
+                <div 
+                    className="scroll-spacer" 
+                    style={{ 
+                        height: `calc(${childrenCount} * 100vh)`,
+                        "--children-count": childrenCount 
+                    }}
+                >
                     {/* Snap points for vertical scroll mapping */}
                     <div className="snap-points">
                         {Array.from({ length: childrenCount }).map((_, i) => (
@@ -40,7 +46,7 @@ export default function ScrollHorizontal({ children, containerRef, scrollYProgre
 
                         <motion.div className="gallery" style={{ x }}>
                             {Children.map(children, (child, index) => (
-                                <div key={index} className="gallery-item">
+                                <div key={index} className={`gallery-item ${index === childrenCount - 1 ? 'snap-last' : ''}`}>
                                     <div className="item-wrapper">
                                         {child}
                                     </div>
@@ -149,12 +155,17 @@ function StyleSheet() {
 
             @media (max-width: 768px) {
                 .scroll-container {
-                    overflow-y: auto;
+                    overflow-y: scroll;
+                    -webkit-overflow-scrolling: touch;
                     scroll-snap-type: none;
-                    height: auto;
+                    height: 100vh;
+                    width: 100vw;
+                    position: relative;
+                    touch-action: pan-y;
                 }
                 .scroll-spacer {
-                    height: auto !important;
+                    /* Keep the height so scroll progress still works for the 3D model */
+                    height: calc(var(--children-count, 4) * 100vh) !important;
                 }
                 .sticky-wrapper {
                     position: relative;
@@ -169,8 +180,11 @@ function StyleSheet() {
                 }
                 .gallery-item {
                     width: 100%;
-                    height: auto;
+                    height: 100vh;
                     min-height: 100vh;
+                }
+                .gallery-item.snap-last {
+                    scroll-snap-align: none;
                 }
                 .progress-bar {
                     display: none;
