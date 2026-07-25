@@ -4,6 +4,7 @@ const ThemeContext = createContext()
 
 export function ThemeProvider({ children }) {
   const [isDark, setIsDark] = useState(true)
+  const [carLightsOn, setCarLightsOn] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -26,8 +27,12 @@ export function ThemeProvider({ children }) {
     setIsDark(!isDark)
   }
 
+  const toggleCarLights = () => {
+    setCarLightsOn(prev => !prev)
+  }
+
   return (
-    <ThemeContext.Provider value={{ isDark, toggleTheme }}>
+    <ThemeContext.Provider value={{ isDark, toggleTheme, carLightsOn, toggleCarLights }}>
       {children}
     </ThemeContext.Provider>
   )

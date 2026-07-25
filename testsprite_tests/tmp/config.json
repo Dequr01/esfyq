@@ -1,0 +1,17 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "executionArgs": {
+    "projectName": "esfyq",
+    "projectPath": "/Users/esfyq/projects/esfyq",
+    "testIds": [],
+    "additionalInstruction": "",
+    "serverMode": "production",
+    "envs": {
+      "API_KEY": "sk-user-5-Wt_6_daNRa8Muqbk4ySbSPQ3wP53ErXhSmFybhuAhnhCyPN_qwiiPAjBNihIOKguDGAw1UEKRrFf68yJwYJZEO2mNKkpWKuQc5Jrc6BFMm9Hb9d55Jqb9IRp8f7jCgHUQ"
+    }
+  },
+  "serverPort": 49476
+}

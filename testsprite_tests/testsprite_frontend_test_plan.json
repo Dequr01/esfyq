@@ -1,0 +1,519 @@
+[
+  {
+    "id": "TC001",
+    "title": "Load the hero chapter with the 3D background ready",
+    "description": "A visitor can land on the homepage and see the hero chapter become usable with the animated background loaded.",
+    "category": "Hero Genesis Section",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the hero headline and supporting content are visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the 3D background is displayed and ready for interaction"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Load the homepage hero and 3D background",
+    "description": "Verify that a visitor can load the homepage, wait for initialization, and see the first chapter with the 3D background ready to use.",
+    "category": "3D Model Background",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the loading screen to complete"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the hero chapter is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the 3D background is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Submit the contact form with valid details",
+    "description": "Verify that a visitor can reach the contact section, submit the form with complete details, and receive success feedback.",
+    "category": "Contact Form",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the loading screen to complete"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the contact section"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the name field with a valid name"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with a valid email address"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the message field with a valid message"
+      },
+      {
+        "type": "action",
+        "description": "Submit the contact form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a success confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Open and close the mobile navigation menu",
+    "description": "Verify that a mobile user can expand the navigation menu and collapse it again without leaving the homepage unusable.",
+    "category": "Chapter Navigation",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the loading screen to complete"
+      },
+      {
+        "type": "action",
+        "description": "Resize the viewport to a mobile size"
+      },
+      {
+        "type": "action",
+        "description": "Open the mobile navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the mobile navigation menu is visible"
+      },
+      {
+        "type": "action",
+        "description": "Collapse the mobile navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the mobile navigation menu is hidden"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Scroll through chapters as the 3D scene updates",
+    "description": "Verify that scrolling through the homepage progresses through chapters and updates the 3D background while the page remains usable.",
+    "category": "3D Model Background",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the loading screen to complete"
+      },
+      {
+        "type": "action",
+        "description": "Scroll down through the page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the visible chapter changes as the page is scrolled"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the 3D background responds to scrolling"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Toggle the theme on mobile and keep the portfolio usable",
+    "description": "Verify that a mobile user can switch between light and dark themes and continue browsing the portfolio.",
+    "category": "Chapter Navigation",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the loading screen to complete"
+      },
+      {
+        "type": "action",
+        "description": "Resize the viewport to a mobile size"
+      },
+      {
+        "type": "action",
+        "description": "Toggle the theme"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the theme appearance changes"
+      },
+      {
+        "type": "action",
+        "description": "Toggle the theme again"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the original theme appearance is restored"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Jump from hero to projects using the main call to action",
+    "description": "A visitor can use the hero call to action to jump directly to the projects section and continue browsing work.",
+    "category": "Hero Genesis Section",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Click the primary call to action in the hero"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the projects section is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the hero chapter is no longer the active focus"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Navigate between chapters with the fixed navigation",
+    "description": "Verify that a user can move between portfolio chapters using the fixed navigation and reach different sections successfully.",
+    "category": "Chapter Navigation",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the loading screen to complete"
+      },
+      {
+        "type": "action",
+        "description": "Click a chapter navigation link for an interior section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected chapter section is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click a chapter navigation link for a different section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the newly selected chapter section is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Browse the project list in the projects chapter",
+    "description": "A visitor can reach the projects chapter and review the curated portfolio items.",
+    "category": "Projects Artifacts Section",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the projects section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the project list is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify multiple projects are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "View the about chapter with bio and skill cards",
+    "description": "A visitor can scroll to the about chapter and review the creator bio and skill-focused cards.",
+    "category": "About Craft Section",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the about section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the bio content is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the skill cards are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Browse selected projects and open external project links",
+    "description": "Verify that a user can view the projects section and open both a live demo and a GitHub repository link from an active project.",
+    "category": "Projects Section",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the loading screen to complete"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the projects section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify selected projects are displayed"
+      },
+      {
+        "type": "action",
+        "description": "Open a live demo link for an active project"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the external project destination opens successfully"
+      },
+      {
+        "type": "action",
+        "description": "Return to the portfolio"
+      },
+      {
+        "type": "action",
+        "description": "Open the GitHub source link for an active project"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the repository destination opens successfully"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "See the hero scroll indicator with the introductory content",
+    "description": "A visitor can recognize the scroll affordance in the hero while viewing the landing chapter.",
+    "category": "Hero Genesis Section",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the scroll indicator is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the hero introduction remains visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Show validation when the contact form is incomplete",
+    "description": "Verify that a visitor receives validation feedback when trying to submit the contact form with required information missing.",
+    "category": "Contact Form",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the loading screen to complete"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the contact section"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the name field with a valid name"
+      },
+      {
+        "type": "action",
+        "description": "Leave the email or message field incomplete"
+      },
+      {
+        "type": "action",
+        "description": "Submit the contact form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a validation error is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Open a live demo from an active project",
+    "description": "A visitor can open the live demo for an active project from the projects chapter.",
+    "category": "Projects Artifacts Section",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the projects section"
+      },
+      {
+        "type": "action",
+        "description": "Click the live demo link for an active project"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the demo destination opens"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the portfolio page is still accessible in the original tab"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC015",
+    "title": "Open a GitHub repository from an active project",
+    "description": "A visitor can open the source repository for an active project from the projects chapter.",
+    "category": "Projects Artifacts Section",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the projects section"
+      },
+      {
+        "type": "action",
+        "description": "Click the source code link for an active project"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the repository destination opens"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the project remains identifiable in the portfolio"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC016",
+    "title": "Read the about section and review skill cards",
+    "description": "Verify that a visitor can reach the about section and see the bio and skill cards that summarize the portfolio owner.",
+    "category": "About Section",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the loading screen to complete"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the about section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the bio content is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the skill cards are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC017",
+    "title": "Move from about to projects by scrolling through chapters",
+    "description": "A visitor can continue from the about chapter into the projects chapter using normal page scrolling.",
+    "category": "About Craft Section",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the about section"
+      },
+      {
+        "type": "action",
+        "description": "Scroll further down to the projects section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the projects list is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the about section is no longer the active focus"
+      }
+    ],
+    "priority": "Medium"
+  }
+]

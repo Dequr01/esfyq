@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react'
-import ScrollHorizontal from './components/ScrollHorizontal'
+import ScrollHorizontal from './components/compounds/ScrollHorizontal'
 import { useScroll } from 'framer-motion'
 import { useRef } from 'react'
-import Hero from './components/Hero'
-import About from './components/About'
-import Projects from './components/Projects'
-import Contact from './components/Contact'
-import Navigation from './components/Navigation'
-import ChapterDots from './components/ChapterDots'
-import ModelBackground from './components/ModelBackground'
-import LoadingScreen from './components/LoadingScreen'
+import Hero from './components/organisms/Hero'
+import About from './components/organisms/About'
+// import Projects from './components/organisms/Projects'
+import Contact from './components/organisms/Contact'
+import Navigation from './components/compounds/Navigation'
+import ChapterDots from './components/molecules/ChapterDots'
+import ModelBackground from './components/compounds/ModelBackground'
+import LoadingScreen from './components/compounds/LoadingScreen'
 
 import { ThemeProvider } from './context/ThemeContext'
+
+export const CHAPTER_BOUNDARIES = [0, 0.5, 1.0];
 
 function App() {
   const [modelLoaded, setModelLoaded] = useState(false)
@@ -21,18 +23,6 @@ function App() {
     container: containerRef
   })
 
-  useEffect(() => {
-    // Listen for model loaded event from BackgroundEngine
-    const handleModelLoaded = () => {
-      setModelLoaded(true)
-    }
-
-    window.addEventListener('modelLoaded', handleModelLoaded)
-
-    return () => {
-      window.removeEventListener('modelLoaded', handleModelLoaded)
-    }
-  }, [])
 
   return (
     <ThemeProvider>
@@ -53,7 +43,7 @@ function App() {
           <ScrollHorizontal containerRef={containerRef} scrollYProgress={scrollYProgress}>
             <Hero />
             <About />
-            <Projects />
+            {/* <Projects /> */}
             <Contact />
           </ScrollHorizontal>
         </main>
